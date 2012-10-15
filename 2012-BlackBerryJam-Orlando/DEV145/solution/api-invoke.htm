@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<!--
+* Copyright 2010-2011 Research In Motion Limited.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+-->
+
+<div data-bb-type="screen" data-bb-effect="fade" >
+	<div data-bb-type="title" data-bb-caption="Task - WebWorks API (Invoke)" data-bb-back-caption="Back" ></div>
+	<script id="invokeJS" src="js/api-invoke.js"></script>
+	
+	<div data-bb-type="round-panel"> 
+		<div data-bb-type="panel-header">blackberry.invoke Examples</div>
+		<p>
+			This example will demonstrate how to launch external applications using the blackberry.invoke WebWorks API.
+		</p>
+		<ol>
+			<li>Add &lt;feature&gt; elements for blackberry.invoke and blackberry.invoke.BrowserArguments to config.xml </li>
+			<li>Read URL from input field below</li>
+			<li>Launch browser to target url when user clicks 'Open' button</li>
+		</ol>
+		<div data-bb-type="label-control-container">
+			
+			<div data-bb-type="row">
+				<div data-bb-type="label">URL:</div>
+				<input type="url" value="http://devblog.blackberry.com" id="txtUrl"/>
+			</div>
+			<div style="margin:3px;">
+				<div data-bb-type="button" data-bb-style="stretch" onclick="invokeBrowser()">Open</div>
+			</div>
+			
+			<p>
+				Tips:		   
+			</p>
+			<ul>
+				<li>See http://developer.blackberry.com/html5/api</li>
+			<ul>
+			
+		</div>
+	</div>
+	
+</div>
+

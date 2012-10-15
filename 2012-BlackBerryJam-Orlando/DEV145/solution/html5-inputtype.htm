@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<!--
+* Copyright 2010-2011 Research In Motion Limited.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+-->
+
+<div data-bb-type="screen" data-bb-effect="fade" >
+	<div data-bb-type="title" data-bb-caption="Task - HTML5 (Input Types)" data-bb-back-caption="Back" ></div>
+	
+	<div data-bb-type="round-panel"> 
+		<div data-bb-type="panel-header">Input Type Examples</div>
+		<div data-bb-type="label-control-container">
+
+		<p>
+			This example demonstrates how HTML5 input types can be used to target different virtual keyboard variants:
+		</p>
+		
+		<ol>
+			<li>Add more input fields to this page, similar the following row. </li>
+			<li>
+				Change the value of the type property from 'text' to any of the following:
+				<ul>
+					<li>tel</li>
+					<li>url</li>
+					<li>email</li>
+					<li>number</li>
+					<li>date</li>
+					<li>time</li>
+					<li>datetime</li>
+					<li>color</li>
+				</ul>
+			</li>
+			<li>Using simulator or live device, test which virtual keyboard is displayed.</li>
+		</ol>
+		
+			<div data-bb-type="row">
+				<div data-bb-type="label">Text</div>
+				<input type="text" value="Hello World" />
+			</div>
+			<div data-bb-type="row">
+				<div data-bb-type="label">Url</div>
+				<input type="url" value="http:/devblog.blackberry.com" />
+			</div>
+
+			<div data-bb-type="row">
+				<div data-bb-type="label">Tel</div>
+				<input type="tel" value="555 5555" />
+			</div>
+			<div data-bb-type="row">
+				<div data-bb-type="label">Email</div>
+				<input type="email" value="test@test.com" />
+			</div>
+			<div data-bb-type="row">
+				<div data-bb-type="label">Date</div>
+				<input type="date" value="2012-04-01" />
+			</div>
+			<div data-bb-type="row">
+				<div data-bb-type="label">Time</div>
+				<input type="time" value="" />
+			</div>
+			<div data-bb-type="row">
+				<div data-bb-type="label">Color</div>
+				<input type="color" value="#FF0000" />
+			</div>
+
+			
+		</div>
+	</div>
+	
+</div>
+

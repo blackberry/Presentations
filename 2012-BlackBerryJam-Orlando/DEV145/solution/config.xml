@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+* Copyright 2010-2011 Research In Motion Limited.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+-->
+<widget xmlns:rim="http://www.blackberry.com/ns/widgets" 
+		rim:header="RIM-Widget:rim/widget" xmlns="http://www.w3.org/ns/widgets"
+		version="1.0.0" id="webworksLab">
+
+		
+	<!-- Define application properties -->	
+	<name>WebWorks Lab</name>
+	<description>Sample application for developers to use to learn how to use bbUI.js, HTML5, APIs and UI/Layout principles in their WebWorks application development.</description>
+	<author href="https://twitter.com/n_adam_stanley">Adam Stanley</author>
+	<license href="http://www.apache.org/licenses/LICENSE-2.0">
+		Licensed under the Apache License, Version 2.0 (the "License");
+		you may not use this file except in compliance with the License.
+		You may obtain a copy of the License at
+			http://www.apache.org/licenses/LICENSE-2.0
+		Unless required by applicable law or agreed to in writing, software
+		distributed under the License is distributed on an "AS IS" BASIS,
+		WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		See the License for the specific language governing permissions and limitations under the License.
+	</license>
+
+	
+	<!-- Define the URI that is loaded when application is opened (can be a local file, or remote URL) -->
+	<content src="index.htm" />
+
+
+	<!-- Home-screen icon must be an 86x86 PNG -->
+	<icon src="images\icon.png" />
+	<icon src="images\icon.png" rim:hover="true" />
+	
+	
+	<!-- Background image should have same dimensions as the screen resolution of the target device 
+		1024 x 600 BlackBerry PlayBook Tablet OS
+		1280 x 768 BlackBerry 10 Dev Alpha
+	-->
+	<rim:loadingScreen backgroundImage="images\background.png" foregroundImage="images\hippo.png" onFirstLaunch="true">
+		<rim:transitionEffect type="fadeIn" />
+	</rim:loadingScreen>
+
+	
+	<!-- Enable focus mode navigation for track-pad enabled BlcakBerry devices (Produces a stronger native look & feel) -->
+	<rim:navigation mode="focus" />
+
+	
+	<!-- Define external domains and/or WebWorks API features that this application has access to -->
+	<access uri="http://devblog.blackberry.com" subdomains="true" />
+	<feature id="blackberry.app" />
+	<feature id="blackberry.invoke"/>
+	<feature id="blackberry.event"/>
+
+
+</widget>
