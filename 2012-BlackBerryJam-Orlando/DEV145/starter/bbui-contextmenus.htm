@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<!--
+* Copyright 2010-2011 Research In Motion Limited.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+-->
+<div data-bb-type="screen" data-bb-effect="fade">
+	<div data-bb-type="title" data-bb-caption="Task - bbUI (Context Menus)" data-bb-back-caption="Back" ></div>
+	<script id="contextmenusJS" src="js/bbui-contextmenus.js"></script>
+
+	<div data-bb-type="round-panel" style="margin-top:10px;"> 
+		<div data-bb-type="panel-header">Context Menus (BlackBerry 10 only)</div>
+		<p>
+			BlackBerry 10 allows for a press and hold context menu that is very similar to the action bar overflow menu.
+		</p>
+		<p>
+			Peeking the context menu will show the row of action icons that can be clicked and part of the context information in the header of the menu. When the user swipes from right to left it will pull the full menu into view if they want to see the text labels for all the items.
+		</p>
+	</div>
+	
+	<div data-bb-type="round-panel"> 
+		
+		<div data-bb-type="image-list">
+			<div data-bb-type="item" data-bb-img="images/icons/icon1.png" data-bb-title="Show Menu" onclick="showContextMenu()">Display the full context menu</div>
+		</div>
+	
+		<b> Tasks: </b>
+		<ol>
+			<li>Test using Ripple, select "BlackBerry 10 WebWorks" platform and click on "Show Menu" image button</li>
+
+			<li>Edit bbui-contextmenu.htm</li>
+			<li>Add 3 menu items to the &lt;div id="contextMenu" data-bb-type="context-menu"&gt; element</li>
+			<li>Test using Ripple, verify newly added items appear when the context menu is opened</li>
+
+			<li>Add a second image item to the &lt;div data-bb-type="image-list"&gt; element having data-bb-title="Peek Menu"</li>
+			<li>Assign onclick="peekContextMenu()" to this image item </li>
+			<li>Test using Ripple, verify only context menu icons are displayed when selecting the "Peek Menu" image item</li>
+			
+			<li>Edit js/bbui-contextmenu.js</li>
+			<li>Create a clickHandler(param) method to handle context menu item selections.</li>
+			<li>Display a message to the user indicating which context menu item was selected.</li>
+			<li>Assign onclick="clickHandler('ABC')" to each of the context menu items within the &lt;div id="contextMenu" data-bb-type="context-menu"&gt; element </li>
+			<li>Test using Ripple, verify the clickHandler message is displayed when selecting items from the context menu</li>
+		</ol>
+	
+		
+		<div>
+			<p>
+				Tips:		   
+			</p>
+			<ul>
+				<li>See https://github.com/blackberry/bbUI.js for documentation</li>
+				<li>bb.popScreen() will always remove the last screen added to the display stack.</li>
+			<ul>
+		</div>
+	
+	</div>
+
+	
+	<div id="contextMenu" data-bb-type="context-menu">
+		<div data-bb-type="action" data-bb-img="images/actionBar/cog_dark_theme.png">Item A</div>
+		<div data-bb-type="action" data-bb-img="images/actionBar/cog_dark_theme.png" onclick="bb.popScreen();">Back</div>
+	</div>
+	
+</div>
+	

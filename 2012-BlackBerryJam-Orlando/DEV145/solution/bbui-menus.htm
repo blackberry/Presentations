@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<!--
+* Copyright 2010-2011 Research In Motion Limited.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+-->
+
+<div data-bb-type="screen" data-bb-effect="fade" >
+	<div data-bb-type="title" data-bb-caption="Task - bbUI (Menus)" data-bb-back-caption="Back" ></div>
+	
+	<div data-bb-type="round-panel"> 
+		<div data-bb-type="panel-header">bbUI.js Menus</div>
+		<p>		
+			The bbUI toolkit builds the application's UI in the most optimized fashion for the target operating system.  It follows a methodology of a single web page that has screens loaded into it as HTML fragments: each screen is its own HTML fragment file. 
+		</p>
+		<p>
+			The toolkit then uses AJAX to **push** and **pop** screens off of the stack.  The toolkilt manages the screen stack and loading the content.  This ensures the best use of device memory.
+		</p>
+		<p>
+			You can also define screen loading transition effects. Currently the fade effect is supported.
+		</p>
+		
+		<b> Tasks: </b>
+		<ol>
+			<li>Edit bbui-screens.htm</li>
+			<li>Add onclick="bb.pushScreen('bbui-newscreen.htm', 'newscreen');" to the &lt;button&gt; </li>
+			<li>Test using Ripple, click on the "open new screen" button and verify that "New Screen" is opened</li>
+			<li>Click the back button.  Verify "New Screen" is popped off display stack and return to bbui-screens.htm.</li>
+			<li>Edit bbui-newscreen.htm</li>
+			<li>Add data-bb-effect="fade" to the &lt;div data-bb-type="screen"&gt; element</li>
+			<li>Test using Ripple, click on the "open new screen" button and verify that "New Screen" is opened with a fade effect.</li>
+		</ol>
+		
+		<div style="margin:3px;">
+			<div data-bb-type="button" data-bb-style="stretch" onclick="bb.pushScreen('bbui-newscreen.htm', 'newscreen');">Open new screen</div>
+		</div>
+		
+		<div>
+			<p>
+				Tips:		   
+			</p>
+			<ul>
+				<li>See https://github.com/blackberry/bbUI.js for documentation</li>
+				<li>bb.popScreen() will always remove the last screen added to the display stack.</li>
+			<ul>
+		</div>
+	</div>
+	
+</div>
+

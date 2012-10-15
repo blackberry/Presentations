@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<!--
+* Copyright 2010-2011 Research In Motion Limited.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+-->
+
+<div data-bb-type="screen" data-bb-effect="fade" >
+	<div data-bb-type="title" data-bb-caption="Task - config.xml" data-bb-back-caption="Back" ></div>
+	
+	<div data-bb-type="round-panel"> 
+		<div data-bb-type="panel-header">Beginner: Define application properties</div>
+		<ol>
+			<li>Edit config.xml </li>
+			<li>Modify &lt;name&gt; and &lt;author&gt; elements. </li>
+			<li>Verify changes in Ripple using Information panel. </li>
+			<li>Test changes on simulator or live device, verifying home screen application name is correct.</li>
+		</ol>
+		
+		<div data-bb-type="panel-header">Intermediate: Create home screen icon</div>
+		<ol>
+			<li>Create an 86x86 PNG home screen icon named icon.png. </li>
+			<li>See http://www.orison.biz/apps/playbook-icon-maker/ for help. </li>
+			<li>Save icon to this local webworks project. </li>
+			<li>Ensure src property of &lt;icon&gt; element in config.xml is correct. </li>
+			<li>Verify changes in Ripple using Information panel. </li>
+			<li>Test changes on simulator or live device, verifying home screen icon is correct.</li>
+		</ol>
+		
+		<div data-bb-type="panel-header">Advanced: White listing external domains</div>
+		<ol>
+			<li>Edit config.xml </li>
+			<li>Replace the "index.htm" value of the &lt;content&gt; element src property with "http://devblog.blackberry.com". </li>
+			<li>Add an &lt;access&gt; element to config.xml to whitelist the "http://devblog.blackberry.com" domain correctly.  See http://developer.blackberry.com/html5/documentation for help ("Developing" tutorial).</li>
+			<li>Test changes on simulator or live device. Verify whether any content from external domains has not been loaded.
+			<li>Add more &lt;access&gt; elements to config.xml to whitelist any remaining external domains used by "http://devblog.blackberry.com" (e.g. http://www.twitter.com). </li>
+			<li>Test changes on simulator or live device. Verify all external content has been loaded correctly.</li>
+		</ol>
+		
+	</div>
+	
+</div>
+

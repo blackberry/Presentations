@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<!--
+* Copyright 2010-2011 Research In Motion Limited.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+-->
+<html> 
+	<head>
+		<meta name="x-blackberry-defaultHoverEffect" content="false" />
+		<meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=no,target-densitydpi=device-dpi" />
+		<link  rel="stylesheet" type="text/css" href="bbui-0.9.1.css"><link />
+		<script type="text/javascript" src="bbui-0.9.1.js"></script>
+		<script type="text/javascript">
+			
+			// You must call init on bbUI before any other code loads.  
+			
+			//Initialize bbUI.js and configure default properties:
+
+			var params = {
+				bb10ActionBarDark: true, 		// If set to true, the action bar will use the dark theme
+				bb10ControlsDark: true,			// If set to true, the controls will use the dark theme
+				bb10ListsDark: false,			// If set to true, lists will use the dark theme (you need a dark background)
+				bb10AccentColor: '#2D566F',		// An accent color to be used for headers and other areas
+				bb10HighlightColor: '#00A8DF'	// A highlight color to use when a user selects an item
+			};
+			bb.init(params);
+			
+		</script>
+		<script src="webworks.js"></script>
+		<script>
+			function ready() {
+				console.log("WebWorks APIs are now available");
+			}
+			window.addEventListener("load", function(e) {
+				document.addEventListener("webworksready", ready);
+			});
+		</script>
+	</head>
+	<body onload="bb.pushScreen('menu.htm', 'menu');">	
+	</body>
+</html>
