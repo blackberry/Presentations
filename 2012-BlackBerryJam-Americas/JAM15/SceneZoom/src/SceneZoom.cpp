@@ -403,7 +403,7 @@ void SceneZoom::updateSceneList()
     for (int i=0; i<num; i++) {
         const char *name = getSceneName(list[i]);
         if (name) {
-            Option *option = Option::create().value(i).text(name);
+            Option *option = Option::create().value(list[i]).text(name);
             qDebug() << "adding option " << option->text() << " to list";
             mSceneList->add(option);
             if (list[i] == CAMERA_SCENE_DEFAULT) {
