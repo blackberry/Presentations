@@ -1,0 +1,6 @@
+<root>
+     	<item  name="Running"  	price="$0.99" imageURL="images/in_app_icon_running.png"/>
+        <item  name="Vroom"  	price="$0.99" imageURL="images/in_app_icon_vroom.png"/>
+        <item  name="Wave"   	price="$0.99" imageURL="images/in_app_icon_wave.png"/>
+        
+</root>
