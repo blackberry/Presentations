@@ -3,7 +3,7 @@ REM This script can be used to sideload a BAR file
 REM Dependencies: BlackBerry 10 WebWorks SDK
 REM   Change the sdk path to be that of the WebWorks SDK installed on your machine:
 
-SET sdk=C:\Program Files\Research In Motion\BlackBerry 10 WebWorks SDK 1.0.2.9\dependencies\tools\binx
+SET sdk=C:\Program Files\Research In Motion\BlackBerry 10 WebWorks SDK 1.0.2.9\dependencies\tools\bin
 
 IF "%1" == "" GOTO MISSINGPARAMS
 IF "%2" == "" GOTO MISSINGPARAMS
