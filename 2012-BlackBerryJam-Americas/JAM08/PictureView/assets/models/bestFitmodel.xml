@@ -1,0 +1,4 @@
+<root>
+    <image title="a" imageSource="asset:///images/mp3.png" mime="audio/mp3" uri="music://songs?play=1"/>
+    <image title="b" imageSource="asset:///images/pdf.png" mime="application/pdf" uri="file:////accounts/1000/shared/documents/gs_en_US.pdf"/>
+</root>
