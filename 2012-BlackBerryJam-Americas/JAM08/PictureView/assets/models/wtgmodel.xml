@@ -1,0 +1,5 @@
+<model>
+    <header title="document">
+        <image display="sample1.docx" mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document" source="file:////accounts/1000/shared/documents/sample1.docx" xdata=""/>
+    </header>
+</model>

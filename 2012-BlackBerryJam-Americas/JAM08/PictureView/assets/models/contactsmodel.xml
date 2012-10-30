@@ -1,0 +1,5 @@
+<model>
+    <header title="AddContacts">
+        <image display="Phone string" mime="application/vnd.bb.string.phone" source="data://local" xaction="bb.action.ADDTOCONTACTS" xdata="5195976768"/>
+    </header>
+</model>

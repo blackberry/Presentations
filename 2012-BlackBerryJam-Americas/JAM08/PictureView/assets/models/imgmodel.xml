@@ -1,0 +1,17 @@
+<model>
+    <header title="jpg">
+        <image display="Sample1" mime="image/jpeg" source="file:///accounts/1000/shared/photos/jpg/sample1.jpg" xdata=""/>
+    </header>
+    <header title="png">
+        <image display="Sample2" mime="image/png" source="file:///accounts/1000/shared/photos/png/sample2.png" xdata=""/>
+    </header>
+    <header title="bmp">
+        <image display="Sample3" mime="image/bmp" source="file:///accounts/1000/shared/photos/bmp/sample3.bmp" xdata=""/>
+    </header>
+    <header title="gif">
+        <image display="Sample4" mime="image/gif" source="file:///accounts/1000/shared/photos/gif/sample4.gif" xdata=""/>
+    </header>
+    <header title="tif">
+        <image display="Sample1" mime="image/tif" source="file:///accounts/1000/shared/photos/tif/sample1.tif" xdata=""/>
+    </header>
+</model>

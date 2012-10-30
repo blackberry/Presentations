@@ -1,0 +1,25 @@
+<model>
+    <header title="view">
+        <image display="bluetooth" mime="setup/view" source="settings://bluetooth" xdata=""/>
+        <image display="about" mime="setup/view" source="settings://about" xdata=""/>
+        <image display="airplane" mime="setup/view" source="settings://airplane" xdata=""/>
+        <image display="enterprise" mime="setup/view" source="settings://enterprise" xdata=""/>
+        <image display="date_time" mime="setup/view" source="settings://date_time" xdata=""/>
+        <image display="hdmi" mime="setup/view" source="settings://hdmi" xdata=""/>
+        <image display="keyboard" mime="setup/view" source="settings://keyboard" xdata=""/>
+        <image display="language" mime="setup/view" source="settings://language" xdata=""/>
+        <image display="general" mime="setup/view" source="settings://general" xdata=""/>
+        <image display="screen" mime="setup/view" source="settings://screen" xdata=""/>
+        <image display="bb_bridge" mime="setup/view" source="settings://bb_bridge" xdata=""/>
+        <image display="security" mime="setup/view" source="settings://security" xdata=""/>
+        <image display="sounds" mime="setup/view" source="settings://sounds" xdata=""/>
+        <image display="storagesharing" mime="setup/view" source="settings://storagesharing" xdata=""/>
+        <image display="internettethering" mime="setup/view" source="settings://internettethering" xdata=""/>
+        <image display="softwareupdate" mime="setup/view" source="settings://softwareupdate" xdata=""/>
+        <image display="wifi" mime="setup/view" source="settings://wifi" xdata=""/>
+        <image display="pim" mime="setup/view" source="settings://pim" xdata=""/>
+        <image display="pim-listAccounts" mime="setup/view" source="settings://pim/listAccounts" xdata=""/>
+        <image display="pim-defaultAccounts" mime="setup/view" source="settings://pim/defaultAccounts" xdata=""/>
+        <image display="pim-createAccount" mime="setup/view" source="settings://pim/createAccount" xdata=""/>
+    </header>
+</model>

@@ -1,0 +1,8 @@
+<model>
+    <header title="photo">
+        <image display="Photo mode" mime="" source="camera://photo" xdata=""/>
+    </header>
+     <header title="video">
+        <image display="Video mode" mime="" source="camera://video" xdata=""/>
+    </header>
+</model>

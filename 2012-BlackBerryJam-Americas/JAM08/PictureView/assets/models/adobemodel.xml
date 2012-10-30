@@ -1,0 +1,5 @@
+<model>
+    <header title="pdf">
+        <image display="adobe intro.pdf" mime="application/pdf" source="file:////accounts/1000/shared/documents/Getting Started with Adobe Reader.pdf" xdata=""/>
+    </header>
+</model>
