@@ -6,7 +6,7 @@ in San Jose, California.
 Material is organized into directories, named by the session code.
 
 * JAM14 - Spice up your Apps with NFC
-* JAM15 - [Native API Deep Dive](http://hosting.desire2learncapture.com/RIM/1/watch/48.aspx)
+* JAM15 - [Native API Deep Dive: Camera](http://hosting.desire2learncapture.com/RIM/1/watch/48.aspx)
 * JAM41 - (Hands-on Lab) Getting Started with Web on BlackBerry
 * JAM43 - (Hands-on Lab) Optimization and Performance for Web Developers
 * JAM48 - Leveraging BlackBerry Services: Push and Notification Manager
