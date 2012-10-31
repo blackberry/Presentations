@@ -1,0 +1,5 @@
+<model>
+    <header title="ms-excel">
+        <image display="sample1.xls" mime="application/vnd.ms-excel" source="file:////accounts/1000/shared/documents/sample1.xls" xdata=""/>
+    </header>
+</model>

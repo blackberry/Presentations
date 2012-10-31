@@ -1,0 +1,5 @@
+<model>
+    <header title="plain">
+        <image display="alarm clock" mime="text/plain" source="data://local" xdata="alarmClockPane"/>
+    </header>
+</model>

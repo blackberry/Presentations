@@ -1,0 +1,6 @@
+<model>
+    <header title="powerpoint">
+        <image display="sample1.ppt" mime="application/vnd.ms-powerpoint" source="file:////accounts/1000/shared/documents/sample1.ppt" xdata=""/>
+        <image display="sample1.pps" mime="application/vnd.ms-powerpoint" source="file:////accounts/1000/shared/documents/sample1.pps" xdata=""/>
+    </header>
+</model>

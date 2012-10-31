@@ -1,0 +1,5 @@
+<model>
+    <header title="mp3">
+        <image display="Tom Sawyer" mime="audio/mp3" source="music://songs?play=1" xdata=""/>
+    </header>
+</model>
