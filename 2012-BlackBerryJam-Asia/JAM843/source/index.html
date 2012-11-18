@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--
+* Copyright 2012 Research In Motion Limited.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+-->
+<html>
+	<head>
+		<title>Web Inspector Companion</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link  rel="stylesheet" type="text/css" href="css/bbui-0.9.4.css"><link />
+		<script type="text/javascript" src="js/bbui-0.9.4.js"></script>
+		<script type="text/javascript" src="js/webworks.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			/*global window, document, console, XMLHttpRequest, bb, onscreenready, ondomready */
+
+			function webworksready() {
+				"use strict";
+				try {
+					console.log("webworksready.");
+					document.removeEventListener("webworksready", webworksready, false);
+
+					bb.init({
+						onscreenready: function (element, id) {
+							try {
+								console.log("onscreenready - routing id selected to page");
+								if (id === "main") {
+									element.querySelector("#elements").onclick = function () {
+										bb.pushScreen('elements.html', 'elements');
+									};
+									element.querySelector("#resources").onclick = function () {
+										bb.pushScreen('resources.html', 'resources');
+									};
+									element.querySelector("#timelinenetwork").onclick = function () {
+										bb.pushScreen('timelinenetwork.html', 'timelinenetwork');
+									};
+									element.querySelector("#sources").onclick = function () {
+										bb.pushScreen('sources.html', 'sources');
+									};
+									element.querySelector("#console").onclick = function () {
+										bb.pushScreen('console.html', 'console');
+									};
+									element.querySelector("#profiles").onclick = function () {
+										bb.pushScreen('profiles.html', 'profiles');
+									};
+									element.querySelector("#advanced").onclick = function () {
+										bb.pushScreen('advanced.html', 'advanced');
+									};
+								}
+							} catch (err) {
+								console.log("onscreenready: " + err);
+							}
+						},
+						ondomready: function (element, id) {
+							try {
+								console.log("ondomready");
+								console.log(id);
+							} catch (err) {
+								console.log("ondomready: " + err);
+							}
+						}
+					});
+					bb.pushScreen('main.html', 'main');
+				} catch (err) {
+					console.log("webworksready: " + err);
+				}
+			}
+
+			function load() {
+				"use strict";
+				try {
+					console.log("load");
+					window.removeEventListener("load", load, false);
+					document.addEventListener("webworksready", webworksready, false);
+				} catch (err) {
+					console.log("load: " + err);
+				}
+			}
+
+			window.addEventListener("load", load, false);
+		</script>
+	</body>
+</html>
