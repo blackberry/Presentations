@@ -1042,8 +1042,8 @@ module.exports = {
 });
 define('lib/webworks-info', function (require, exports, module) {
 module.exports = {
-	hash: "0ce47be0f0e032b04d4c4ba14e243218",
-	version: "1.0.2.9"
+	hash: "a81306ae37a172470ea0a456cdfabf5f",
+	version: "1.0.3.8"
 };
 });
 /*
@@ -1246,12 +1246,16 @@ module.exports = {
             event: require("event")
         };
     }
-    //Only start building window.webworks once the DOMContent is loaded
-    document.addEventListener('DOMContentLoaded', createWebworksReady, false);
-    //If the DOM Content has already been loaded then create window.webworks immediately
-    if (document.readyState === 'complete') {
-        createWebworksReady();
+
+    //build window.webworks once all loading has completed
+    function onReadyStateChanged() {
+        if (document.readyState === 'complete') {
+            createWebworksReady();
+            document.removeEventListener('readystatechange', onReadyStateChanged, false);
+        }
     }
+    document.addEventListener('readystatechange', onReadyStateChanged, false); 
+    onReadyStateChanged();
 }());
 
 
