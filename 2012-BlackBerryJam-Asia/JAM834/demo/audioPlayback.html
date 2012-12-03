@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Audio Playback</title>
+    <link rel="stylesheet" href="css/BlackBerry-JQM-all.min.css" />
+    <script src="js/BlackBerry-JQM-all.min.js"></script>
+</head>
+<body>
+<div data-role="page">
+    <div data-role="header" data-position="fixed">
+        <h1>Audio Playback</h1>
+    </div>
+    <div data-role="content">
+        <div data-role="collapsible" data-collapsed="false">
+            <h3>Audio Tag</h3>
+
+            <audio controls="controls">
+                <source src="assets/M-GameBG.ogg" type="audio/ogg" />
+                <source src="assets/M-GameBG.mp3" type="audio/mp3" />
+                Your browser does not support the audio tag.
+            </audio>
+        </div>
+        <div data-role="collapsible" data-collapsed="false">
+            <h3>Audio Tag with JS</h3>
+            <script>
+                var audio = document.createElement("audio");
+                audio.src = "assets/M-GameBG.mp3";
+                audio.load();
+                $('#play').click(function(){ audio.play(); });
+                $('#pause').click(function(){ audio.pause(); });
+                $('#volume').change(function(){ audio.volume = $(this).val() / 100.0; });
+            </script>
+            <div data-role="controlgroup" data-type="horizontal">
+                <a href="" id="play" data-role="button">Play</a>
+                <a href="" id="pause" data-role="button">Pause</a>
+            </div>
+            <label for="volume">Volume:</label>
+            <input type="range" name="volume" id="volume" value="100" min="0" max="100" />
+        </div>
+    </div>
+    <!--/content-->
+    <div data-role="footer" data-position="fixed">
+        <div id="action-bar-area" data-role="actionbar">
+            <div data-role="back"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
