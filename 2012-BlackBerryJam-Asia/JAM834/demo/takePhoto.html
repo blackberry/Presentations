@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Take Photo</title>
+    <link rel="stylesheet" href="css/BlackBerry-JQM-all.min.css" />
+    <script src="js/BlackBerry-JQM-all.min.js"></script>
+    <script src="local:///chrome/webworks.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        
+    </script>
+</head>
+<body>
+<div data-role="page">
+    <div data-role="header" data-position="fixed">
+        <h1>Take Photo (does not work on BB10 yet)</h1>
+    </div>
+    <div data-role="content">
+        <video autoplay controls></video>
+        <img src="">
+        <canvas style="display:none;"></canvas>
+        <input type="button" id="takePhoto" value="Take Photo" />
+        <script type="text/javascript">
+            var video = document.querySelector('video');
+            var canvas = document.querySelector('canvas');
+            var ctx = canvas.getContext('2d');
+            var localMediaStream = null;
+
+            $('#takePhoto').click(function snapshot() {
+                if (localMediaStream) {
+                    ctx.drawImage(video, 0, 0, 320, 480);
+                    document.querySelector('img').src = canvas.toDataURL("image/png");
+                }
+            });
+
+            function onFailSoHard(ex) {
+                console.log(ex);
+            }
+            $(window).load(function(){
+                navigator.getUserMedia = navigator.getUserMedia||navigator.webkitGetUserMedia||false;
+                if(!!navigator.getUserMedia) {
+                    navigator.getUserMedia({audio: true, video: true}, function(stream) {
+                        video.src = ('webkitURL' in window)?window.webkitURL.createObjectURL(stream):stream;
+                        localMediaStream = stream ;
+                    }, onFailSoHard);
+                } else {
+                    alert("not supported"); // fallback.
+                }    
+            })
+            
+        </script>
+    </div>
+    <!--/content-->
+    <div data-role="footer" data-position="fixed">
+        <div id="action-bar-area" data-role="actionbar">
+            <div data-role="back"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
