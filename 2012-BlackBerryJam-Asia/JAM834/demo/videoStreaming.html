@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Video Streaming</title>
+    <link rel="stylesheet" href="css/BlackBerry-JQM-all.min.css" />
+    <script src="js/BlackBerry-JQM-all.min.js"></script>
+</head>
+<body>
+<div data-role="page">
+    <div data-role="header" data-position="fixed">
+        <h1>Video Streaming</h1>
+    </div>
+    <div data-role="content">
+        <div data-role="collapsible" data-collapsed="false">
+            <h3>Streaming Video (http)</h3>
+            <video controls="controls">
+                <source src="http://video-js.zencoder.com/oceans-clip.mp4" type="video/mp4" />
+                Your browser does not support the audio tag.
+            </video>
+        </div>
+        <div data-role="collapsible" data-collapsed="false">
+            <h3>Streaming Video (HLS)</h3>
+            <video src="https://devimages.apple.com.edgekey.net/resources/http-streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8" controls="controls"></video>
+            <!--<video src="https://devimages.apple.com.edgekey.net/resources/http-streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8" controls="controls"></video>-->
+        </div>
+    </div>
+    <!--/content-->
+    <div data-role="footer" data-position="fixed">
+        <div id="action-bar-area" data-role="actionbar">
+            <div data-role="back"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

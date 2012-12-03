@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>VideoJS</title>
+    <link rel="stylesheet" href="css/BlackBerry-JQM-all.min.css" />
+    <script src="js/BlackBerry-JQM-all.min.js"></script>
+    <link href="css/video-js.css" rel="stylesheet" type="text/css">
+    <!-- video.js must be in the <head> for older IEs to work. -->
+    <script src="js/video.js"></script>
+
+    <!-- Unless using the CDN hosted version, update the URL to the Flash SWF -->
+    <script>
+        _V_.options.flash.swf = "assets/video-js.swf";
+    </script>
+</head>
+<body>
+<div data-role="page">
+    <div data-role="header" data-position="fixed">
+        <h1>VideoJS</h1>
+    </div>
+    <div data-role="content">
+        <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="640" height="264"
+               poster="http://video-js.zencoder.com/oceans-clip.png"
+               data-setup="{}">
+            <source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />
+            <source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm' />
+            <source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg' />
+            <track kind="captions" src="captions.vtt" srclang="en" label="English" />
+        </video>
+    </div>
+    <!--/content-->
+    <div data-role="footer" data-position="fixed">
+        <div id="action-bar-area" data-role="actionbar">
+            <div data-role="back"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
