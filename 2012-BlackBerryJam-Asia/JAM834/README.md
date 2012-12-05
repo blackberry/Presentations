@@ -17,7 +17,7 @@ Learn how to create rich multimedia apps with the audio, video and camera capabi
 * [Christopher Saunders](https://twitter.com/#!/csaunders_ca)
 
 ## Files
-Presentation files - BlackBerryJamAsia_JAM384_Lee_Saunders.pdf
+Presentation files - BlackBerryJamAsia_JAM834_Lee_Saunders.pdf
 Demo files - demo\*
 
 ## Demo Assets
