@@ -32,10 +32,6 @@
 
 using namespace bb::cascades;
 
-// workaround a ForeignWindowControl race condition
-#define WORKAROUND_FWC
-
-
 // qDebug() now logs to slogger2, which I find inconvenient since the NDK does not pick this up in the console,
 // so I am installing a custom handler to log to stderr.
 static void log_to_stderr(QtMsgType msgType, const char *msg)
@@ -75,7 +71,8 @@ static const char* getSceneName(camera_scenemode_t sceneMode)
 }
 
 
-SceneZoom::SceneZoom() :
+SceneZoom::SceneZoom(bb::cascades::Application *app) :
+        QObject(app),
         mCameraHandle(CAMERA_HANDLE_INVALID)
 {
     // install custom logging handler
@@ -155,13 +152,12 @@ SceneZoom::SceneZoom() :
             .add(mTakePictureButton)
             .add(mStopButton));
 
-   Application::instance()->setScene(Page::create().content(container));
+   app->setScene(Page::create().content(container));
 }
 
 
 SceneZoom::~SceneZoom()
 {
-    delete mViewfinderWindow;
 }
 
 
@@ -176,13 +172,9 @@ void SceneZoom::onWindowAttached(screen_window_t win,
     // put the viewfinder window behind the cascades window
     i = -1;
     screen_set_window_property_iv(win, SCREEN_PROPERTY_ZORDER, &i);
-#ifdef WORKAROUND_FWC
-    // seems we still need a workaround in R9 for a potential race due to
-    // ForeignWindowControl updating/flushing the window's properties in
-    // parallel with the execution of the onWindowAttached() handler.
-    mViewfinderWindow->setVisible(false);
-    mViewfinderWindow->setVisible(true);
-#endif
+    screen_context_t screen_ctx;
+    screen_get_window_property_pv(win, SCREEN_PROPERTY_CONTEXT, (void **)&screen_ctx);
+    screen_flush_context(screen_ctx, 0);
 }
 
 

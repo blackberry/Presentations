@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <screen/screen.h>
 #include <camera/camera_api.h>
+#include <camera/camera_meta.h>
 #include <bps/soundplayer.h>
 #include <pthread.h>
 //#include <sys/neutrino.h>
@@ -71,6 +72,44 @@ static int filter_coid;
 static struct sigevent filter_sigev;
 static bool filter_stop = false;
 
+// a struct which we'll use to pass information between the metadata consumer function
+// and the function which invoked camera_meta_iterate_metadata().
+typedef struct {
+    // face co-ordinates
+    int fx;
+    int fy;
+    int fw;
+    int fh;
+    // the retrieved face co-ordinates will persist until 10 frames without metadata elapse
+    int debounce;
+    bool found;
+} face_state_t;
+
+
+static bool metadata_consumer(camera_metadata_t metadata,
+                              camera_metaformat_t format,
+                              void *arg)
+{
+    face_state_t *state = (face_state_t*)arg;
+    if (format == CAMERA_METAFORMAT_FACE) {
+        // parse the 1st face we see
+        camera_region_t region;
+        if (camera_meta_get_face_region(metadata, &region) != EOK) {
+            fprintf(stderr, "failed to parse face metadata");
+        } else {
+            state->fx = region.left;
+            state->fy = region.top;
+            state->fw = region.width;
+            state->fh = region.height;
+            state->found = true;
+            // stop processing metadata once we find the 1st face
+            return false;
+        }
+    }
+    // continue processing metadata
+    return true;
+}
+
 
 // the BLUR filter will just pixelate the picture where faces are detected.
 // Since face-detect can be a bit jittery, the blur may appear and disappear from frame to frame
@@ -79,155 +118,47 @@ static bool filter_stop = false;
 static void apply_blur_filter(camera_buffer_t* inbuf,
                               camera_buffer_t* outbuf)
 {
-    // the retrieved face co-ordinates will persist until 10 frames without metadata elapse
-    static int fx = -1;
-    static int fy = -1;
-    static int fw = -1;
-    static int fh = -1;
-    static int debounce = 0;
+    static face_state_t state = { 0 };
 
     // NOTE: there is apparently a bug in assembling viewfinder metadata packets.
     // if size of 65536 is reported, then we've hit the bug!
     // alternate workaround is not to loop, but just inspect the 1st packet
     if (inbuf->framemetasize == 65536) return;
 
-    // we're going to scan the input metadata buffer for XMP face-detect data
-    camera_metapacket_t* packet;
-    for (packet = inbuf->framemeta;
-            packet < inbuf->framemeta + inbuf->framemetasize;
-            packet += packet->size + sizeof(camera_metapacket_t))
-    {
-        if ((packet->format == CAMERA_METAFORMAT_XMP) && (packet->size > 0)) {
-            fprintf(stderr,"found XMP packet!\n");
-            char * xml = (char *) &inbuf->framemeta->data;
-            // parsing the XMP packet is fairly tedious.
-            // you might want to investigate some other XML parsers.
-            // Also note that there is a lot more face metadata available than I care to use.
-            // Fields like pitch and roll and yaw may not be accurately set by the hardware yet either.
-            fprintf(stderr, "Parsing XMP packet\n");
-            try {
-                SXMPMeta::Initialize();
+    // we're going to scan the input metadata buffer face-detect data
+    state.found = false;
+    camera_meta_iterate_metadata(inbuf,
+                                 &metadata_consumer,
+                                 (void*)&state);
 
-                string actualPrefix;
-                SXMPMeta::RegisterNamespace(MWG_REGIONS_NS, "mwg-rs", &actualPrefix );
-                SXMPMeta::RegisterNamespace(ADOBE_AREA_NS, "stArea", &actualPrefix);
-                SXMPMeta::RegisterNamespace(ADOBE_DIM_NS, "stDim", &actualPrefix);
-                SXMPMeta::RegisterNamespace(RIM_NS, "rim-ns", &actualPrefix);
-
-                //now load the XML and traverse it using libxmp
-                SXMPMeta meta;
-                meta.ParseFromBuffer(xml, strlen(xml));
-
-                // get a path to the RegionList Array
-                string regionListPath;
-                SXMPUtils::ComposeStructFieldPath(MWG_REGIONS_NS, "Regions", MWG_REGIONS_NS, "RegionList", &regionListPath);
-
-                // get a path to the AppliedToDimensions struct
-                string appliedToDimensionsPath;
-                SXMPUtils::ComposeStructFieldPath(MWG_REGIONS_NS, "Regions", MWG_REGIONS_NS, "AppliedToDimensions", &appliedToDimensionsPath);
-
-                // get the AppliedToDimensions struct's field values
-                string dimW, dimH, dimUnit;
-                meta.GetStructField(MWG_REGIONS_NS, appliedToDimensionsPath.c_str(), ADOBE_DIM_NS, "w", &dimW, 0);
-                meta.GetStructField(MWG_REGIONS_NS, appliedToDimensionsPath.c_str(), ADOBE_DIM_NS, "h", &dimH, 0);
-                meta.GetStructField(MWG_REGIONS_NS, appliedToDimensionsPath.c_str(), ADOBE_DIM_NS, "unit", &dimUnit, 0);
-
-                // determine how many array items there are
-                // note, XMP array items are 1-based indices
-                int count = meta.CountArrayItems(MWG_REGIONS_NS, regionListPath.c_str());
-                // loop for each face
-                for (int i = 1; i <= count; ++i) {
-                    // get a path to the first item of the RegionList Array
-                    string regionListFirstItemPath;
-                    SXMPUtils::ComposeArrayItemPath(MWG_REGIONS_NS, regionListPath.c_str(), i, &regionListFirstItemPath);
-
-                    // get a path to the Type field
-                    string typePath;
-                    SXMPUtils::ComposeStructFieldPath(MWG_REGIONS_NS, regionListFirstItemPath.c_str(), MWG_REGIONS_NS, "Type", &typePath);
-
-                    // get the Type field's value
-                    string typeValue;
-                    meta.GetProperty(MWG_REGIONS_NS, typePath.c_str(), &typeValue, NULL);
-
-                    if (strcmp(typeValue.c_str(), "Face") == 0) {
-                        // get a path to the Area struct
-                        string areaPath;
-                        SXMPUtils::ComposeStructFieldPath(MWG_REGIONS_NS, regionListFirstItemPath.c_str(), MWG_REGIONS_NS, "Area", &areaPath);
-
-                        // get the Area struct's field values
-                        string faceX, faceY, faceW, faceH, faceUnit;
-                        meta.GetStructField(MWG_REGIONS_NS, areaPath.c_str(), ADOBE_AREA_NS, "x", &faceX, 0);
-                        meta.GetStructField(MWG_REGIONS_NS, areaPath.c_str(), ADOBE_AREA_NS, "y", &faceY, 0);
-                        meta.GetStructField(MWG_REGIONS_NS, areaPath.c_str(), ADOBE_AREA_NS, "w", &faceW, 0);
-                        meta.GetStructField(MWG_REGIONS_NS, areaPath.c_str(), ADOBE_AREA_NS, "h", &faceH, 0);
-                        meta.GetStructField(MWG_REGIONS_NS, areaPath.c_str(), ADOBE_AREA_NS, "unit", &faceUnit, 0);
-
-                        // get a path to the Extensions struct
-                        string extensionsPath;
-                        SXMPUtils::ComposeStructFieldPath(MWG_REGIONS_NS, regionListFirstItemPath.c_str(), MWG_REGIONS_NS, "Extensions", &extensionsPath);
-
-                        // get the Extension struct's field values
-                        string extPitch, extRoll, extYaw, extScore, extPriority;
-                        meta.GetStructField(MWG_REGIONS_NS, extensionsPath.c_str(), RIM_NS, "Pitch", &extPitch, 0);
-                        meta.GetStructField(MWG_REGIONS_NS, extensionsPath.c_str(), RIM_NS, "Roll", &extRoll, 0);
-                        meta.GetStructField(MWG_REGIONS_NS, extensionsPath.c_str(), RIM_NS, "Yaw", &extYaw, 0);
-                        meta.GetStructField(MWG_REGIONS_NS, extensionsPath.c_str(), RIM_NS, "Score", &extScore, 0);
-                        meta.GetStructField(MWG_REGIONS_NS, extensionsPath.c_str(), RIM_NS, "Priority", &extPriority, 0);
-
-#if 0
-                        fprintf(stderr, "Face %d \n"
-                                "x = %s, y = %s, w = %s, h = %s, unit = %s \n"
-                                "pitch = %s, roll = %s, yaw = %s, score = %s, priority = %s\n"
-                                "original width = %s, original height = %s, unit = %s\n",
-                                i, faceX.c_str(), faceY.c_str(), faceW.c_str(), faceH.c_str(),
-                                faceUnit.c_str(), extPitch.c_str(), extRoll.c_str(),
-                                extYaw.c_str(), extScore.c_str(), extPriority.c_str(),
-                                dimW.c_str(), dimH.c_str(), dimUnit.c_str());
-#endif
-                        // extract the face co-ordinates.
-                        // note, we will only do one face.
-                        if (strcmp(faceUnit.c_str(), "normalized") == 0) {
-                            fx = (int) (atof(faceX.c_str()) * inbuf->framedesc.nv12.width);
-                            fy = (int) (atof(faceY.c_str()) * inbuf->framedesc.nv12.height);
-                            fw = (int) (atof(faceW.c_str()) * inbuf->framedesc.nv12.width);
-                            fh = (int) (atof(faceH.c_str()) * inbuf->framedesc.nv12.height);
-                        } else { // assume absolute
-                            fx = atoi(faceX.c_str());
-                            fy = atoi(faceY.c_str());
-                            fw = atoi(faceW.c_str());
-                            fh = atoi(faceH.c_str());
-                        }
-
-                        // let's expand the box a bit to be sure we have good coverage of the face
-                        fw = fw * 1.3;
-                        fh = fh * 1.5;
-                        // translate the co-ordinates to the top-left corner instead of centre
-                        fx -= (int)((float)fw / 2.0);
-                        fy -= (int)((float)fh / 2.0);
-                        // since a face was found on this frame, reset the debouncer and break out of the loop.
-                        // we are capable of dealing with multiple faces, but a debouncer would be more
-                        // complex than I care to implement right now.
-                        debounce = 10;
-                        break;
-                    }
-                }
-                SXMPMeta::Terminate();
-            } catch (XMP_Error & e) {
-                printf("XMP ERROR: %s\n", e.GetErrMsg());
-            }
-        }
+    if (state.found) {
+        // let's expand the box a bit to be sure we have good coverage of the face.
+        // first, let's remember the center of the box, so we can scale the top/left co-ords.
+        float cx = state.fx + state.fw / 2;
+        float cy = state.fy + state.fh / 2;
+        state.fw = state.fw * 1.3;
+        state.fh = state.fh * 1.5;
+        state.fx = (int)(cx - state.fw / 2.0);
+        state.fy = (int)(cy - state.fh / 2.0);
+        // clip to 0
+        if (state.fx < 0) state.fx = 0;
+        if (state.fy < 0) state.fy = 0;
+        // since a face was found on this frame, reset the debouncer and break out of the loop.
+        // we are capable of dealing with multiple faces, but a debouncer would be more
+        // complex than I care to implement right now.
+        state.debounce = 10;
     }
 
     // debounce...
-    if (debounce > 0) {
-        debounce--;
+    if (state.debounce > 0) {
+        state.debounce--;
         // draw the blur!
         // we're just going to pixelate the Y plane to achieve this effect
-        for (int y = fy; y < fy + fh; y++) {
+        for (int y = state.fy; y <= state.fy + state.fh; y++) {
             if (y >= (int)inbuf->framedesc.nv12.height) {
                 break;
             }
-            for (int x = fx; x < fx + fw; x++) {
+            for (int x = state.fx; x <= state.fx + state.fw; x++) {
                 if (x >= (int)inbuf->framedesc.nv12.width) {
                     break;
                 }
