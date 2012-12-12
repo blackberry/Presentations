@@ -26,8 +26,8 @@ int main(int argc, char **argv)
     Application app(argc, argv);
 
     // initialize camera app
-    SceneZoom mainApp;
+    new SceneZoom(&app);
 
-    return Application::exec();
+    return app.exec();
 }
 

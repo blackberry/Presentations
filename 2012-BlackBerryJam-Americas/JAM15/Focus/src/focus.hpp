@@ -24,6 +24,7 @@
 #include <bb/cascades/DropDown>
 #include <bb/cascades/TouchEvent>
 #include <bb/cascades/ImageView>
+#include <bb/cascades/Application>
 
 #include <camera/camera_api.h>
 
@@ -46,13 +47,21 @@ public slots:
     void onFocusModeChanged(bb::cascades::Option* option);
     void onFocusTouch(bb::cascades::TouchEvent *event);
     void onViewfinderFrameChanged(const QRectF & frame);
+    void onStatusChanged(camera_handle_t handle,
+                         camera_devstatus_t status,
+                         uint16_t extra,
+                         void *arg);
 
 public:
-    Focus();
+    Focus(bb::cascades::Application *app);
     ~Focus();
 
 signals:
     void pictureSaved();
+    void statusChanged(camera_handle_t handle,
+                       camera_devstatus_t status,
+                       uint16_t extra,
+                       void *arg);
 
 private:
     int createViewfinder(camera_unit_t cameraUnit,

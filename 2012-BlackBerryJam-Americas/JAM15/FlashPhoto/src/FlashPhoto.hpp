@@ -20,8 +20,10 @@
 
 #include <bb/cascades/ForeignWindowControl>
 #include <bb/cascades/Button>
+#include <bb/cascades/Application>
 
 #include <camera/camera_api.h>
+#include <camera/camera_meta.h>
 
 using namespace bb::cascades;
 
@@ -40,7 +42,7 @@ public slots:
     void onToggleFlash();
 
 public:
-    FlashPhoto();
+    FlashPhoto(bb::cascades::Application *app);
     ~FlashPhoto();
 
 signals:
@@ -55,7 +57,9 @@ private:
     static void stillCallback(camera_handle_t handle,
                               camera_buffer_t *buf,
                               void *arg);
-    void checkMetadata(camera_buffer_t *buf);
+    static bool metaConsumer(camera_metadata_t metadata,
+                             camera_metaformat_t format,
+                             void *arg);
 
     ForeignWindowControl *mViewfinderWindow;
     Button *mStartFrontButton;
