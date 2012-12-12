@@ -35,9 +35,6 @@
 
 using namespace bb::cascades;
 
-// workaround a ForeignWindowControl race condition
-#define WORKAROUND_FWC
-
 
 // qDebug() now logs to slogger2, which I find inconvenient since the NDK does not pick this up in the console,
 // so I am installing a custom handler to log to stderr.
@@ -70,7 +67,8 @@ static const char* getFocusName(camera_focusmode_t mode)
 }
 
 
-Focus::Focus() :
+Focus::Focus(bb::cascades::Application *app) :
+        QObject(app),
         mCameraHandle(CAMERA_HANDLE_INVALID)
 {
     // install custom logging handler
@@ -132,8 +130,16 @@ Focus::Focus() :
 
     // note that since saving pictures happens in a different thread,
     // we need to use a signal/slot in order to re-enable the 'take picture' button.
-    QObject::connect(this,
-                     SIGNAL(pictureSaved()), mTakePictureButton, SLOT(resetEnabled()));
+    QObject::connect(this, SIGNAL(pictureSaved()),
+                     mTakePictureButton, SLOT(resetEnabled()));
+    // also note that since updates to focus co-ordinates come in on a different thread
+    // (the status callback), we need to use a signal/slot to update the indicator.
+    // we need to register the types used as arguments in the signals & slots first.
+    qRegisterMetaType<camera_handle_t>("camera_handle_t");
+    qRegisterMetaType<camera_devstatus_t>("camera_devstatus_t");
+    qRegisterMetaType<uint16_t>("uint16_t");
+    QObject::connect(this, SIGNAL(statusChanged(camera_handle_t, camera_devstatus_t, uint16_t, void*)),
+                     this, SLOT(onStatusChanged(camera_handle_t, camera_devstatus_t, uint16_t, void*)));
 
     // using dock layout mainly.  the viewfinder foreign window sits in the center,
     // and the buttons live in their own container at the bottom.
@@ -171,13 +177,12 @@ Focus::Focus() :
             .add(mTakePictureButton)
             .add(mStopButton));
 
-   Application::instance()->setScene(Page::create().content(container));
+   app->setScene(Page::create().content(container));
 }
 
 
 Focus::~Focus()
 {
-    delete mViewfinderWindow;
 }
 
 
@@ -192,13 +197,9 @@ void Focus::onWindowAttached(screen_window_t win,
     // put the viewfinder window behind the cascades window
     i = -1;
     screen_set_window_property_iv(win, SCREEN_PROPERTY_ZORDER, &i);
-#ifdef WORKAROUND_FWC
-    // seems we still need a workaround in R9 for a potential race due to
-    // ForeignWindowControl updating/flushing the window's properties in
-    // parallel with the execution of the onWindowAttached() handler.
-    mViewfinderWindow->setVisible(false);
-    mViewfinderWindow->setVisible(true);
-#endif
+    screen_context_t screen_ctx;
+    screen_get_window_property_pv(win, SCREEN_PROPERTY_CONTEXT, (void **)&screen_ctx);
+    screen_flush_context(screen_ctx, 0);
 }
 
 
@@ -580,12 +581,25 @@ void Focus::setFacePriority()
 }
 
 
+// this static callback just signals a slot back on our main thread.
+// this is because we are updating UI elements.  it would be equally valid to just define
+// signals for the individual visual element updates required, but this seemed a better
+// generic example.
 void Focus::cameraStatusCallback(camera_handle_t handle,
                                  camera_devstatus_t status,
                                  uint16_t extra,
                                  void* arg)
 {
     Focus *inst = (Focus*)arg;
+    emit inst->statusChanged(handle, status, extra, arg);
+}
+
+
+void Focus::onStatusChanged(camera_handle_t handle,
+                            camera_devstatus_t status,
+                            uint16_t extra,
+                            void* arg)
+{
     if (status == CAMERA_STATUS_FOCUS_CHANGE) {
         // a focus event was received, query the current state of the focus algorithm
         camera_region_t region;
@@ -604,10 +618,10 @@ void Focus::cameraStatusCallback(camera_handle_t handle,
                                         CAMERA_IMGPROP_HEIGHT, &camH);
             // NOTE: I didn't implement it in this sample, but for a front-facing camera where
             // the display is mirrored, you would want to reverse one of the co-ordinate axes.
-            int x = region.left * inst->mVfWindowGeometry.width() / camW + inst->mVfWindowGeometry.x();
-            int y = region.top * inst->mVfWindowGeometry.height() / camH + inst->mVfWindowGeometry.y();
-            int w = region.width * inst->mVfWindowGeometry.width() / camW;
-            int h = region.height * inst->mVfWindowGeometry.height() / camH;
+            int x = region.left * mVfWindowGeometry.width() / camW + mVfWindowGeometry.x();
+            int y = region.top * mVfWindowGeometry.height() / camH + mVfWindowGeometry.y();
+            int w = region.width * mVfWindowGeometry.width() / camW;
+            int h = region.height * mVfWindowGeometry.height() / camH;
 
             // reposition the container which holds the focus indicator.
             // NOTE: I am scaling the focus indicator to match the region size reported by the
@@ -616,13 +630,13 @@ void Focus::cameraStatusCallback(camera_handle_t handle,
             // just keep a square image and make sure to reposition it accordingly.
             // the math for doing this is beyond the scope of this sample, which is attempting
             // to provide the most accurate visual representation of the focus co-ordinates.
-            Container *container = (Container*)inst->mFocusIndicator->parent();
+            Container *container = (Container*)mFocusIndicator->parent();
             container->setPreferredSize(w, h);
             container->setTranslation(x,y);
-            inst->mFocusIndicator->setVisible(true);
+            mFocusIndicator->setVisible(true);
         } else {
-            // the focus is not locked, clear the visual indicator
-            inst->mFocusIndicator->setVisible(false);
+            // the focus is not locked, clear the visual indicator.
+            mFocusIndicator->setVisible(false);
         }
     }
 }

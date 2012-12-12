@@ -26,8 +26,8 @@ int main(int argc, char **argv)
     Application app(argc, argv);
 
     // initialize camera app
-    FlashPhoto mainApp;
+    new FlashPhoto(&app);
 
-    return Application::exec();
+    return app.exec();
 }
 

@@ -184,7 +184,11 @@ run_state_machine()
             //    This is how the we do it in this sample.
             // 2. Mute the microphone before starting a video recording and then unmute after
             //    the sound has played.
-            soundplayer_play_sound("event_recording_start");
+
+            // NOTE: we use the _blocking variant here so that the sound doesn't bleed over
+            // into our recording.  An alternate solution may involve muting the mic temporarily,
+            // in order to allow video recording to start slightly sooner.
+            soundplayer_play_sound_blocking("event_recording_start");
 
             err = camera_start_video(handle,
                                      filename,

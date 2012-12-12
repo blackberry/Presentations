@@ -23,6 +23,7 @@
 #include <bb/cascades/Page>
 
 #include <camera/camera_api.h>
+#include <camera/camera_meta.h>
 #include <screen/screen.h>
 #include <bps/soundplayer.h>
 #include <unistd.h>
@@ -33,9 +34,6 @@
 using namespace bb::cascades;
 
 //#define DUMP_EXIF
-
-// workaround a ForeignWindowControl race condition
-#define WORKAROUND_FWC
 
 
 // qDebug() now logs to slogger2, which I find inconvenient since the NDK does not pick this up in the console,
@@ -60,7 +58,8 @@ static const char* flashModeStr(camera_flashmode_t mode) {
 }
 
 
-FlashPhoto::FlashPhoto() :
+FlashPhoto::FlashPhoto(bb::cascades::Application *app) :
+        QObject(app),
         mCameraHandle(CAMERA_HANDLE_INVALID)
 {
     // install custom logging handler
@@ -125,13 +124,12 @@ FlashPhoto::FlashPhoto() :
             .add(mTakePictureButton)
             .add(mStopButton));
 
-   Application::instance()->setScene(Page::create().content(container));
+   app->setScene(Page::create().content(container));
 }
 
 
 FlashPhoto::~FlashPhoto()
 {
-    delete mViewfinderWindow;
 }
 
 
@@ -146,13 +144,9 @@ void FlashPhoto::onWindowAttached(screen_window_t win,
     // put the viewfinder window behind the cascades window
     i = -1;
     screen_set_window_property_iv(win, SCREEN_PROPERTY_ZORDER, &i);
-#ifdef WORKAROUND_FWC
-    // seems we still need a workaround in R9 for a potential race due to
-    // ForeignWindowControl updating/flushing the window's properties in
-    // parallel with the execution of the onWindowAttached() handler.
-    mViewfinderWindow->setVisible(false);
-    mViewfinderWindow->setVisible(true);
-#endif
+    screen_context_t screen_ctx;
+    screen_get_window_property_pv(win, SCREEN_PROPERTY_CONTEXT, (void **)&screen_ctx);
+    screen_flush_context(screen_ctx, 0);
 }
 
 
@@ -234,50 +228,58 @@ void FlashPhoto::shutterCallback(camera_handle_t handle,
 }
 
 
-// I'm going to illustrate how to parse metadata packets here
-void FlashPhoto::checkMetadata(camera_buffer_t *buf)
+// this is the metadata consumer function.  it is invoked for each piece of
+// metadata found attached to a given camera buffer.  return true to continue
+// processing metadata, or false to stop.
+bool FlashPhoto::metaConsumer(camera_metadata_t metadata,
+                              camera_metaformat_t format,
+                              void *arg)
 {
-    if (!buf->framemeta) return;
-    // framemeta points to an array of camera_metapacket_t's
-    // these packets are variable length, but they have headers so
-    // we can find out where the next one begins
-    for (camera_metapacket_t* packet = buf->framemeta;
-         packet < buf->framemeta + buf->framemetasize;
-         packet += packet->size + sizeof(camera_metapacket_t))
-    {
-        if (packet->format == CAMERA_METAFORMAT_EXIF) {
-            // this is an EXIF packet
-            qDebug() << "EXIF metadata found.";
-            ExifData *exifData = exif_data_new_from_data((const unsigned char*)packet->data, packet->size);
-            if (!exifData) continue;
-#ifdef DUMP_EXIF
-            exif_data_dump(exifData);
-#endif
-            ExifByteOrder byteOrder = exif_data_get_byte_order(exifData);
-            ExifEntry* entry = exif_data_get_entry(exifData, EXIF_TAG_FLASH);
-            if (entry) {
-                // EXIF_TAG_FLASH is supposed to be a uint16_t
-                if (entry->format == EXIF_FORMAT_SHORT) {
-                    uint16_t flashVal = exif_get_short(entry->data, byteOrder);
-                    qDebug() << "EXIF FLASH TAG = " << flashVal;
-                    // EXIF standard defines a bunch of values for flash tags, but upon
-                    // a quick glance, it looks like the LSB indicates whether it fired or not.
-                    if (flashVal & 0x0001) {
-                        // play a sound if the flash fired
-                        soundplayer_play_sound("event_recording_start");
+    if (format == CAMERA_METAFORMAT_EXIF) {
+        qDebug() << "EXIF metadata found.";
+        unsigned char *ptr;
+        uint64_t size;
+        if (camera_meta_get_exif(metadata, &ptr, &size) != EOK) {
+            qDebug() << "failed to get exif pointer";
+        } else {
+            ExifData *exifData = exif_data_new_from_data(ptr, size);
+            if (!exifData) {
+                qDebug() << "couldn't find ExifData";
+            } else {
+    #ifdef DUMP_EXIF
+                exif_data_dump(exifData);
+    #endif
+                ExifByteOrder byteOrder = exif_data_get_byte_order(exifData);
+                ExifEntry* entry = exif_data_get_entry(exifData, EXIF_TAG_FLASH);
+                if (entry) {
+                    // EXIF_TAG_FLASH is supposed to be a uint16_t
+                    if (entry->format == EXIF_FORMAT_SHORT) {
+                        uint16_t flashVal = exif_get_short(entry->data, byteOrder);
+                        qDebug() << "EXIF FLASH TAG = " << flashVal;
+                        // EXIF standard defines a bunch of values for flash tags, but upon
+                        // a quick glance, it looks like the LSB indicates whether it fired or not.
+                        if (flashVal & 0x0001) {
+                            // play a sound if the flash fired
+                            soundplayer_play_sound("event_recording_start");
+                        }
+                    } else {
+                        qDebug() << "unexpected EXIF_TAG_FLASH format: " << exif_format_get_name(entry->format);
                     }
                 } else {
-                    qDebug() << "unexpected EXIF_TAG_FLASH format: " << exif_format_get_name(entry->format);
+                    qDebug() << "no flash info found in EXIF";
                 }
-            } else {
-                qDebug() << "no flash info found in EXIF";
+                exif_data_free(exifData);
             }
-            exif_data_free(exifData);
-        } else if (packet->format == CAMERA_METAFORMAT_XMP) {
-            // this is an XMP packet
-            qDebug() << "XMP metadata found.";
+
         }
+        // don't bother processing additional metadata, since we already found what we need.
+        return false;
+    } else {
+        // there are some other formats defined, but we only care about EXIF in this sample
+        qDebug() << "metadata format" << format << "ignored.";
     }
+    // continue processing metadata
+    return true;
 }
 
 
@@ -292,7 +294,9 @@ void FlashPhoto::stillCallback(camera_handle_t handle,
         int fd;
         char filename[CAMERA_ROLL_NAMELEN];
         // let's inspect the metadata
-        inst->checkMetadata(buf);
+        camera_meta_iterate_metadata(buf,
+                                     &metaConsumer,
+                                     arg);
         if (camera_roll_open_photo(handle,
                                    &fd,
                                    filename,

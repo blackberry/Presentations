@@ -22,6 +22,7 @@
 #include <bb/cascades/Button>
 #include <bb/cascades/Slider>
 #include <bb/cascades/DropDown>
+#include <bb/cascades/Application>
 
 #include <camera/camera_api.h>
 
@@ -43,7 +44,7 @@ public slots:
     void onSceneChanged(bb::cascades::Option* option);
 
 public:
-    SceneZoom();
+    SceneZoom(bb::cascades::Application *app);
     ~SceneZoom();
 
 signals:
