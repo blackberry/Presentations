@@ -1,0 +1,1 @@
+include (../CascadesFlashSample.pro)

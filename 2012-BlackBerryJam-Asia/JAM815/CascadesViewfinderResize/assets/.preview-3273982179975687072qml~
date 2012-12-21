@@ -1,0 +1,61 @@
+// Default empty project template
+import bb.cascades 1.0
+import bb.cascades.multimedia 1.0
+
+// creates one page with a label
+
+Page {
+    Container {
+        layout: DockLayout {
+        }
+        onCreationCompleted: {
+            console.debug("All cameras acessible: " + camera.allCamerasAccessible);
+            if (camera.allCamerasAccessible) {
+                console.debug("Opening camera");
+                camera.open(CameraUnit.Rear);
+            }
+        }
+        Camera {
+            id: camera
+            property bool photoBeingTaken
+            //preferredWidth: 10
+            maxWidth: slider.value * 768
+            maxHeight: slider.value * 1280
+            verticalAlignment: VerticalAlignment.Center
+            horizontalAlignment: HorizontalAlignment.Center
+            onCameraOpened: {
+                console.debug("Camera opened");
+                camera.startViewfinder();
+            }
+            onCameraOpenFailed: {
+                console.debug("Camera open FAILED: " + error);
+            }
+            onViewfinderStarted: {
+                console.debug("Viewfinder started");
+                photoBeingTaken = false;
+            }
+            onViewfinderStartFailed: {
+                console.debug("Viewfinder start FAILED: " + error);
+            }
+            onPhotoCaptureFailed: {
+                console.debug("Photo caputre FAILED: " + error);
+                photoBeingTaken = false;
+            }
+            onPhotoSaveFailed: {
+                console.debug("Photo save FAILED: " + error);
+                photoBeingTaken = false;
+            }
+            onPhotoSaved: {
+                console.debug("Photo URI: " + fileName);
+                photoBeingTaken = false;
+            }
+        }
+        Slider {
+            id: slider
+            fromValue: .01
+            toValue: 1
+            value: 1
+            verticalAlignment: VerticalAlignment.Bottom
+        }
+    }
+}
