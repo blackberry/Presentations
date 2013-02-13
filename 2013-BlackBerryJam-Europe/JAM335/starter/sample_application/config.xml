@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets"
+		xmlns:rim="http://www.blackberry.com/ns/widgets"
+		version="1.0.1"
+		id="community.extension.test" xml:lang="en">
+
+	<name> App Name Here </name>
+	<description>Test App for the Extension Template using LED</description>
+	<icon src="icons/icon.png"/>
+	<author rim:copyright="2013"> Your Name Here </author>
+	<content src="index.html"/>
+
+	<rim:permissions>
+		<rim:permit>access_led_control</rim:permit>
+	</rim:permissions>
+
+</widget>
