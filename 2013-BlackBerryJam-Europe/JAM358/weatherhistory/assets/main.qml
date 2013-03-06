@@ -36,6 +36,11 @@ TabbedPane {
         
         WeatherPage {
             id: homeCityPage
+            
+            // The data model and the city property of the home weather is kept in the
+            // _homeModel which is created and bound in C++.
+            weatherData: _homeModel;
+            city: _homeModel.city;
         }
         onTriggered: {
             homeCityPage.resetToTop();

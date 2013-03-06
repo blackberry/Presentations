@@ -17,6 +17,7 @@
 
 #include <bb/cascades/Application>
 #include <QUrl>
+#include "weathermodel.h"
 
 using namespace bb::cascades;
 
@@ -81,6 +82,22 @@ signals:
 	void serverUrlChanged(QUrl url);
 	void simulateProblemsChanged(bool simulate);
 
+public slots:
+
+    /**
+     * This function updates the city in the application settings.
+     *
+     * @param city This is the new home weather city.
+     */
+    void onUpdateHomeCity(QString city);
+
+    /**
+     * This function updates the region of the home city in the application settings.
+     *
+     * @param region This is the region of the new home weather city.
+     */
+    void onUpdateHomeRegion(QString region);
+
 private:
 
     /**
@@ -89,10 +106,20 @@ private:
     void createCitiesModel();
 
     /**
+     * This function creates the model that is used to presenting weather guessing data.
+     */
+    void createWeatherModel();
+
+    /**
      * This function initializes the favorite model which is used for showing the cities marked as
      * favorites in the city database.
      */
     void createFavoritesModel();
+
+    /**
+     * This function initializes the home model which is used for showing the home city weather report.
+     */
+    void createHomeModel();
 
     // The main qml document for the application.
     QmlDocument *mQmlDocument;
@@ -103,12 +130,24 @@ private:
     static const QUrl mDefaultServerUrl;
 	static const bool mDefaultSimulateProblems;
 
+	/**
+	 * Default values for main page data
+	 */
+	static const QString mDefaultHomeRegion;
+	static const QString mDefaultHomeCity;
+
 public:
 	/**
 	 * The keys where the properties are stored in the QSettings object.
 	 */
     static const QString SERVER_URL_SETTINGS_KEY;
     static const QString SIMULATE_PROBLEMS_SETTINGS_KEY;
+
+    /**
+     * The keys where the main page city values are stored
+     */
+    static const QString HOME_REGION_KEY;
+    static const QString HOME_CITY_KEY;
 
     /**
      * Utility function to prepare the server url, it sets up a complete

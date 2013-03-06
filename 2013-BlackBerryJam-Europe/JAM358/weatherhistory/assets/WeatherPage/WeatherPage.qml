@@ -18,6 +18,8 @@ import "../messages"
 // The Weather page; where weather data is presented in a list with custom items.
 Page {
     id: weather
+    property alias city: titleBar.title
+    property alias weatherData: weatherList.dataModel
 
     titleBar: TitleBar {
         id: titleBar

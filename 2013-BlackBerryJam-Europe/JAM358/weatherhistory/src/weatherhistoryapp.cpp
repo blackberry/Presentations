@@ -15,6 +15,7 @@
 #include "weatherhistoryapp.h"
 #include "citymodel.h"
 #include "favoritemodel.h"
+#include "weathermodel.h"
 
 #include <bb/cascades/TabbedPane>
 #include <bb/cascades/QmlDocument>
@@ -22,8 +23,12 @@
 
 const QUrl WeatherHistoryApp::mDefaultServerUrl("http://localhost:8080/WeatherService/");
 const bool WeatherHistoryApp::mDefaultSimulateProblems(false);
+const QString WeatherHistoryApp::mDefaultHomeRegion("Europe");
+const QString WeatherHistoryApp::mDefaultHomeCity("London");
 const QString WeatherHistoryApp::SERVER_URL_SETTINGS_KEY("serverUrl");
 const QString WeatherHistoryApp::SIMULATE_PROBLEMS_SETTINGS_KEY("simulateProblems");
+const QString WeatherHistoryApp::HOME_REGION_KEY("homeRegion");
+const QString WeatherHistoryApp::HOME_CITY_KEY("homeCity");
 
 
 WeatherHistoryApp::WeatherHistoryApp()
@@ -45,6 +50,11 @@ WeatherHistoryApp::WeatherHistoryApp()
     	setSimulateProblems(mDefaultSimulateProblems);
     }
 
+    if (settings.value(HOME_REGION_KEY).isNull() && settings.value(HOME_CITY_KEY).isNull()) {
+        onUpdateHomeRegion(mDefaultHomeRegion);
+        onUpdateHomeCity(mDefaultHomeCity);
+    }
+
     // Create a QMLDocument and load it, using build patterns.
     mQmlDocument = QmlDocument::create("asset:///main.qml");
     mQmlDocument->setParent(this);
@@ -53,9 +63,11 @@ WeatherHistoryApp::WeatherHistoryApp()
     // Create the cities and weather model (these are pages which is not part of the
     // NavigationPane, so the application will need handle navigating to them).
     createCitiesModel();
+    createWeatherModel();
 
     // Setup the favorite page, setup the home page, load the models, and connect to the appropriate signals.
     createFavoritesModel();
+    createHomeModel();
 
     if (!mQmlDocument->hasErrors()) {
 
@@ -83,12 +95,49 @@ void WeatherHistoryApp::createCitiesModel()
     connect(this, SIGNAL(serverUrlChanged(QUrl)), cityModel, SLOT(reset()));
 }
 
+void WeatherHistoryApp::createWeatherModel()
+{
+    // Create a WeatherModel that will load a weather forecast based on its
+    // city property (see WeatherPage.qml and FavoritePage.qml).
+    WeatherModel *weatherModel = new WeatherModel(this);
+    mQmlDocument->setContextProperty("_weatherModel", weatherModel);
+}
+
 void WeatherHistoryApp::createFavoritesModel()
 {
     // Create a CityModel that will load the favorite cities which are presented
     // in a list from FavoritePage.qml.
     FavoriteModel *favoriteModel = new FavoriteModel(QStringList() << "name", "favorites_connection", this);
     mQmlDocument->setContextProperty("_favoriteModel", favoriteModel);
+}
+
+void WeatherHistoryApp::createHomeModel()
+{
+    // The Home page is a special case for the WeatherModel and is set to be used
+    // on the first tab in main.qml (see also WeatherItem.qml).
+    WeatherModel *homeModel = new WeatherModel(this);
+    mQmlDocument->setContextProperty("_homeModel", homeModel);
+
+    // Connect to the homeModel cityChanged signal in order to update the application
+    // settings for the home city (so it will be set on the next time the app launches)
+    connect(homeModel, SIGNAL(regionChanged(QString)), this, SLOT(onUpdateHomeRegion(QString)));
+    connect(homeModel, SIGNAL(cityChanged(QString)), this, SLOT(onUpdateHomeCity(QString)));
+
+    // Begin loading weather data for the home page, if no hometown is stored in
+    // the application settings
+    QSettings settings;
+    homeModel->setRegion(settings.value(HOME_REGION_KEY).toString());
+    homeModel->setCity(settings.value(HOME_CITY_KEY).toString());
+}
+
+void WeatherHistoryApp::onUpdateHomeCity(QString city)
+{
+    QSettings().setValue(HOME_CITY_KEY, QVariant(city));
+}
+
+void WeatherHistoryApp::onUpdateHomeRegion(QString region)
+{
+    QSettings().setValue(HOME_REGION_KEY, QVariant(region));
 }
 
 QUrl WeatherHistoryApp::serverUrl()
