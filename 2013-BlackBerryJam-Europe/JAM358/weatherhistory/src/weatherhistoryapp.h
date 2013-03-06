@@ -59,6 +59,30 @@ class WeatherHistoryApp: public QObject
 	 */
     Q_PROPERTY(bool simulateProblems READ simulateProblems WRITE setSimulateProblems NOTIFY simulateProblemsChanged FINAL);
 
+    /**
+	 * Number of items to request when loading items for lists.
+	 */
+    Q_PROPERTY(uint loadSize READ loadSize WRITE setLoadSize NOTIFY loadSizeChanged FINAL);
+
+    /**
+	 * Max number of items to for lists.
+	 */
+	Q_PROPERTY(uint maxSize READ maxSize WRITE setMaxSize NOTIFY maxSizeChanged FINAL);
+
+    /**
+	 * Hack threshold. Serves as a sort of minimum size for the data model to solve scenario
+	 * described below.
+	 *
+	 * Scenario: If the initial response(s) to data request(s) don't make the list items overflow,
+	 * the 'at end' event is NOT fired until the user actuates the scroll bar (upwards I think). This
+	 * can happen if either the load chunk size is too small or the server is too busy to return the
+	 * the amount of items we requested.
+	 * Solution: Ideally RIM would fix the ListView to fire 'at end' whenever the data changes, even if
+	 * the content doesn't overflow. In the mean time, we'll inspect the calls to DataModel::itemType()
+	 * and when the ListView asks for the type of the last item in the list, we'll assume the end is reached
+	 * and fire the request to get more data. We'll do this until the threshold is reached.
+	 */
+	Q_PROPERTY(uint hackThreshold READ hackThreshold WRITE setHackThreshold NOTIFY hackThresholdChanged FINAL);
 
 public:
     // This is our constructor that sets up the recipe.
@@ -74,6 +98,15 @@ public:
 	bool simulateProblems();
 	void setSimulateProblems(bool simulate);
 
+	uint loadSize();
+	void setLoadSize(uint size);
+
+	uint maxSize();
+	void setMaxSize(uint size);
+
+	uint hackThreshold();
+	void setHackThreshold(uint threshold);
+
 signals:
 
 	/*
@@ -81,6 +114,9 @@ signals:
 	 */
 	void serverUrlChanged(QUrl url);
 	void simulateProblemsChanged(bool simulate);
+	void loadSizeChanged(uint size);
+	void maxSizeChanged(uint size);
+	void hackThresholdChanged(uint threshold);
 
 public slots:
 
@@ -129,6 +165,9 @@ private:
      */
     static const QUrl mDefaultServerUrl;
 	static const bool mDefaultSimulateProblems;
+	static const uint mDefaultLoadSize;
+	static const uint mDefaultMaxSize;
+	static const uint mDefaultHackThreshold;
 
 	/**
 	 * Default values for main page data
@@ -142,6 +181,9 @@ public:
 	 */
     static const QString SERVER_URL_SETTINGS_KEY;
     static const QString SIMULATE_PROBLEMS_SETTINGS_KEY;
+    static const QString LOAD_SIZE_SETTINGS_KEY;
+    static const QString MAX_SIZE_SETTINGS_KEY;
+    static const QString HACK_THRESHOLD_SETTINGS_KEY;
 
     /**
      * The keys where the main page city values are stored
@@ -157,7 +199,7 @@ public:
      * @param resource A string with what resource that should be loaded
      * @param includeLoadSize Boolean controlling if a specific chunk of data entries should be used or not
      */
-    static QUrl prepareServerUrl(const QString& resource);
+    static QUrl prepareServerUrl(const QString& resource, bool includeLoadSize = false);
 };
 
 #endif // ifndef WEATHERHISTORYAPP_H

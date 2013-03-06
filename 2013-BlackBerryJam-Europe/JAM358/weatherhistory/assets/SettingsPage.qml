@@ -24,6 +24,9 @@ Page {
             onTriggered: {
                 serverUrl.text = _app.serverUrl;
                 simulateProblems.checked = _app.simulateProblems;
+                loadSize.text = _app.loadSize;
+                maxSize.text = _app.maxSize;
+                hackThreshold.text = _app.hackThreshold;
                 settingsPage.close();
             }
         }
@@ -33,6 +36,9 @@ Page {
             onTriggered: {
                 _app.serverUrl = serverUrl.text;
                 _app.simulateProblems = simulateProblems.checked;
+                _app.loadSize = loadSize.text;
+                _app.maxSize = maxSize.text;
+                _app.hackThreshold = hackThreshold.text;
                 settingsPage.close();
             }
         }
@@ -129,6 +135,75 @@ Page {
                 }
             }
             
+            Container {
+                horizontalAlignment: HorizontalAlignment.Fill
+                topPadding: 25
+                
+                layout: DockLayout {
+                }
+                
+                Label {
+                    horizontalAlignment: HorizontalAlignment.Left
+                    verticalAlignment: VerticalAlignment.Center
+                    text: "List Load Chunk Size:"
+                    textStyle.color: Color.create("#fafafa")
+                }
+                
+                TextField {
+                    id: loadSize
+                    horizontalAlignment: HorizontalAlignment.Right
+                    verticalAlignment: VerticalAlignment.Center
+                    inputMode: TextFieldInputMode.NumbersAndPunctuation
+                    text: _app.loadSize
+                    preferredWidth: 350
+                }
+            }
+            
+            Container {
+                horizontalAlignment: HorizontalAlignment.Fill
+                topPadding: 25
+                
+                layout: DockLayout {
+                }
+                
+                Label {
+                    horizontalAlignment: HorizontalAlignment.Left
+                    verticalAlignment: VerticalAlignment.Center
+                    text: "Max List Size:"
+                    textStyle.color: Color.create("#fafafa")
+                }
+                
+                TextField {
+                    id: maxSize
+                    horizontalAlignment: HorizontalAlignment.Right
+                    verticalAlignment: VerticalAlignment.Center
+                    inputMode: TextFieldInputMode.NumbersAndPunctuation
+                    text: _app.maxSize
+                    preferredWidth: 350
+                }
+            }
+
+            // Hack threshold, see WeatherHistoryApp::hackThreshold for description
+            Container {
+                horizontalAlignment: HorizontalAlignment.Fill
+                topPadding: 25
+                layout: DockLayout {
+                }
+                Label {
+                    horizontalAlignment: HorizontalAlignment.Left
+                    verticalAlignment: VerticalAlignment.Center
+                    text: "Hack Threshold:"
+                    textStyle.color: Color.create("#fafafa")
+                }
+                TextField {
+                    id: hackThreshold
+                    horizontalAlignment: HorizontalAlignment.Right
+                    verticalAlignment: VerticalAlignment.Center
+                    inputMode: TextFieldInputMode.NumbersAndPunctuation
+                    text: _app.hackThreshold
+                    preferredWidth: 350
+                }
+            }
         } // end form fields Containers
     }    // end Page level Container
 

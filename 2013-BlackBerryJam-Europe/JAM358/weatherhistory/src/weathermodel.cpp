@@ -39,11 +39,22 @@ QString WeatherModel::itemType(const QVariantList& indexPath)
     int itemIndexPath = indexPath[0].toInt();
 
     if (itemIndexPath == currentSize - 1) {
+
         // We only have to check if the item is a loadItem if it is the last entry
         if(value(itemIndexPath).toMap().contains("loadItem")) {
             // If the is contains the loadItem return loadItem type
             typeName = "loadItem";
         }
+
+        // Hack, if the last item is being displayed and the current item count
+        // is below the hack threshold we'll request more data because the "at end"
+        // may not be triggered.
+		uint threshold = QSettings().value(WeatherHistoryApp::HACK_THRESHOLD_SETTINGS_KEY, (uint)1).toUInt();
+
+		if ((uint)currentSize < threshold) {
+			WEATHERAPP_LOG("The type of the last item was requested, and the model has less than the minimum number of items -> will request more data");
+			requestMoreDataFromNetwork();
+		}
     }
 
     return typeName;
@@ -141,9 +152,19 @@ void WeatherModel::httpFinished()
 void WeatherModel::loadNetworkReplyDataIntoModel(QVariantList weatherData)
 {
 	int numberOfItemsReceived = weatherData.size();
+	int numberOfItemsInModel = childCount(QVariantList());
+    uint maxItems = QSettings().value(WeatherHistoryApp::MAX_SIZE_SETTINGS_KEY, (uint)-1).toUInt();
     removeLoadItem();
 
     WEATHERAPP_LOG(QString("Received %1 entries").arg(numberOfItemsReceived));
+
+    // Remove extra items if too many
+    while ((uint)numberOfItemsInModel + (uint)numberOfItemsReceived > maxItems) {
+    	weatherData.removeLast();
+    	numberOfItemsReceived--;
+    }
+
+    WEATHERAPP_LOG(QString("Will use %1 entries").arg(numberOfItemsReceived));
 
     // Iterate over all the items in the received data.
     QVariantList::Iterator item = weatherData.begin();
@@ -164,6 +185,11 @@ void WeatherModel::loadNetworkReplyDataIntoModel(QVariantList weatherData)
 
     // Increment our data index
     mCursor.index += numberOfItemsReceived;
+
+    // Check limits
+    if ((uint)numberOfItemsInModel + (uint)numberOfItemsReceived >= maxItems) {
+    	mCursor.endOfData = true;
+    }
 
     insertLoadItem();
 }
@@ -189,7 +215,7 @@ void WeatherModel::requestMoreDataFromNetwork()
 
         QString encodedCity = QUrl(mCity).toEncoded();
         QString encodedRegion = QUrl(mRegion).toEncoded();
-        QUrl path = WeatherHistoryApp::prepareServerUrl("resources/cities/" + encodedRegion + "/" +  encodedCity);
+        QUrl path = WeatherHistoryApp::prepareServerUrl("resources/cities/" + encodedRegion + "/" +  encodedCity, true);
         path.addQueryItem("start", QString("%1").arg(mCursor.index));
 
         WEATHERAPP_LOG("GET " + path.toString());

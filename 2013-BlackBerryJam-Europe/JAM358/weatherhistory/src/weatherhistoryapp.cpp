@@ -23,10 +23,16 @@
 
 const QUrl WeatherHistoryApp::mDefaultServerUrl("http://localhost:8080/WeatherService/");
 const bool WeatherHistoryApp::mDefaultSimulateProblems(false);
+const uint WeatherHistoryApp::mDefaultLoadSize(10);
+const uint WeatherHistoryApp::mDefaultMaxSize(1024);
+const uint WeatherHistoryApp::mDefaultHackThreshold(10);
 const QString WeatherHistoryApp::mDefaultHomeRegion("Europe");
 const QString WeatherHistoryApp::mDefaultHomeCity("London");
 const QString WeatherHistoryApp::SERVER_URL_SETTINGS_KEY("serverUrl");
 const QString WeatherHistoryApp::SIMULATE_PROBLEMS_SETTINGS_KEY("simulateProblems");
+const QString WeatherHistoryApp::LOAD_SIZE_SETTINGS_KEY("loadSize");
+const QString WeatherHistoryApp::MAX_SIZE_SETTINGS_KEY("maxSize");
+const QString WeatherHistoryApp::HACK_THRESHOLD_SETTINGS_KEY("hackThreshold");
 const QString WeatherHistoryApp::HOME_REGION_KEY("homeRegion");
 const QString WeatherHistoryApp::HOME_CITY_KEY("homeCity");
 
@@ -50,6 +56,18 @@ WeatherHistoryApp::WeatherHistoryApp()
 
     if (settings.value(SIMULATE_PROBLEMS_SETTINGS_KEY).isNull()) {
     	setSimulateProblems(mDefaultSimulateProblems);
+    }
+
+    if (settings.value(LOAD_SIZE_SETTINGS_KEY).isNull()) {
+    	setLoadSize(mDefaultLoadSize);
+    }
+
+    if (settings.value(MAX_SIZE_SETTINGS_KEY).isNull()) {
+    	setMaxSize(mDefaultMaxSize);
+    }
+
+    if (settings.value(HACK_THRESHOLD_SETTINGS_KEY).isNull()) {
+    	setHackThreshold(mDefaultHackThreshold);
     }
 
     if (settings.value(HOME_REGION_KEY).isNull() && settings.value(HOME_CITY_KEY).isNull()) {
@@ -177,9 +195,51 @@ void WeatherHistoryApp::setSimulateProblems(bool simulate)
     }
 }
 
-QUrl WeatherHistoryApp::prepareServerUrl(const QString& resource)
+uint WeatherHistoryApp::loadSize()
 {
-    // Constructs the url e.g. http://localhost:8080/WeatherService/resources/cities/Europe/London/
+    return QSettings().value(LOAD_SIZE_SETTINGS_KEY, false).toUInt();
+}
+
+void WeatherHistoryApp::setLoadSize(uint size)
+{
+    uint oldLoadSize = loadSize();
+    QSettings().setValue(LOAD_SIZE_SETTINGS_KEY, size);
+
+    if (oldLoadSize != size) {
+        emit loadSizeChanged(size);
+    }
+}
+
+uint WeatherHistoryApp::maxSize()
+{
+    return QSettings().value(MAX_SIZE_SETTINGS_KEY, false).toUInt();
+}
+
+void WeatherHistoryApp::setMaxSize(uint size)
+{
+    uint oldMaxSize = maxSize();
+    QSettings().setValue(MAX_SIZE_SETTINGS_KEY, size);
+
+    if (oldMaxSize != size) {
+        // Emitting this signal will reset all models
+        emit maxSizeChanged(size);
+    }
+}
+
+uint WeatherHistoryApp::hackThreshold()
+{
+	return QSettings().value(HACK_THRESHOLD_SETTINGS_KEY, false).toUInt();
+}
+
+void WeatherHistoryApp::setHackThreshold(uint threshold)
+{
+	QSettings().setValue(HACK_THRESHOLD_SETTINGS_KEY, threshold);
+
+	emit hackThresholdChanged(threshold);
+}
+
+QUrl WeatherHistoryApp::prepareServerUrl(const QString& resource, bool includeLoadSize)
+{
 	QSettings settings;
 	QString url = settings.value(SERVER_URL_SETTINGS_KEY, "serverUrl not set!").toUrl().toString(QUrl::StripTrailingSlash);
 
@@ -195,8 +255,9 @@ QUrl WeatherHistoryApp::prepareServerUrl(const QString& resource)
 		retval.addQueryItem("problems", "yes%20please");
 	}
 
-	// Set the number of items to load
-	retval.addQueryItem("size", QString("%1").arg(20));
+	if (includeLoadSize) {
+		retval.addQueryItem("size", QString("%1").arg(settings.value(LOAD_SIZE_SETTINGS_KEY, mDefaultLoadSize).toUInt()));
+	}
 
 	return retval;
 }
