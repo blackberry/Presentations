@@ -37,6 +37,9 @@ TabbedPane {
         WeatherPage {
             id: homeCityPage
         }
+        onTriggered: {
+            homeCityPage.resetToTop();
+        }
     }
 
     // The city browse page where filtering is done based on continents

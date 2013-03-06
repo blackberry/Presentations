@@ -18,5 +18,38 @@ import "../messages"
 // The Weather page; where weather data is presented in a list with custom items.
 Page {
     id: weather
+
+    titleBar: TitleBar {
+        id: titleBar
+        title: "Göteborg"
+    }
     
+    Container {
+        Container {
+            id: listviewContainer
+            
+            layout: DockLayout {
+            }
+
+            // The list of weather forecasts
+            ListView {
+                id: weatherList
+                                
+                // An XML model is also available to populate the preview.
+                dataModel: XmlDataModel {source: "../models/weather.xml"}
+
+                listItemComponents: [
+                    ListItemComponent {
+                        type: "item"
+                        WeatherItem {
+                        }
+                    }
+                ]
+            }
+        }
+    }
+    
+    function resetToTop(){
+        weatherList.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
+    }
 }
