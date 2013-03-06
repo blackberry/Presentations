@@ -1,0 +1,9 @@
+<root>
+	<continent name="All cities"/>
+    <continent name="Africa"/>
+    <continent name="Asia"/>
+    <continent name="Australia"/>
+    <continent name="Europe"/>    
+    <continent name="North America"/>    
+    <continent name="South America"/>
+</root>
