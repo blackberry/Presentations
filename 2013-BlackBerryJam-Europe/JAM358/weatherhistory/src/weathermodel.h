@@ -178,9 +178,10 @@ private:
     bool mInitialLoad;
 
     struct DataCursor {
-    	DataCursor() : index(0) { }
+    	DataCursor() : index(0), endOfData(false) { }
 
     	uint index;    	// The current data index for server requests
+    	bool endOfData; // A flag indicating we shouldn't go out to the network for data anymore
     } mCursor;
 };
 

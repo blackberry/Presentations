@@ -56,13 +56,30 @@ void WeatherModel::httpFinished()
 			httpStatus = 200;
 		}
     } else {
-    	// An error occurred, we need to handle it
+    	// An error occurred, try to get the http status code and reason
+    	QVariant statusCode = mReply->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+		QString reason = mReply->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toString();
+
+		if (statusCode.isValid()) {
+			httpStatus = statusCode.toInt();
+		}
+
+		WEATHERAPP_LOG(QString("Network request to %1 failed with http status %2 %3").arg(mReply->request().url().toString()).arg(httpStatus).arg(reason));
     }
 
 	// Now behave
 	switch (httpStatus) {
 	case 200:
 		loadNetworkReplyDataIntoModel(weatherDataFromServer);
+		break;
+	case 404:
+		if (mCursor.index == 0) {
+			// If we requested index 0 and didn't get an empty array it means the city does not exist and we should show an error
+			mCursor.endOfData = true;
+		} else {
+			// If we get a 404 in the middle of a data set it simply means there is no more data
+			mCursor.endOfData = true;
+		}
 		break;
 	}
 
@@ -117,7 +134,7 @@ void WeatherModel::onSslErrors(QNetworkReply * reply, const QList<QSslError> & e
 void WeatherModel::requestMoreDataFromNetwork()
 {
     // Only request data if there is currently no request being done.
-    if(mReply == 0) {
+    if(mReply == 0 && mCursor.endOfData == false) {
     	WEATHERAPP_LOG("mReply and mCursor.endOfData were false/0, requesting more items");
 
         QString encodedCity = QUrl(mCity).toEncoded();
@@ -133,7 +150,7 @@ void WeatherModel::requestMoreDataFromNetwork()
         connect(mReply, SIGNAL(finished()), this, SLOT(httpFinished()));
     }
     else {
-    	WEATHERAPP_LOG(QString("will not request more data because mReply was %1 or mCursor.").arg((int)mReply));
+    	WEATHERAPP_LOG(QString("will not request more data because mReply was %1 or mCursor.endOfData was %2").arg((int)mReply).arg(mCursor.endOfData));
     }
 }
 
