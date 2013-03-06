@@ -96,6 +96,9 @@ void WeatherModel::loadNetworkReplyDataIntoModel(QVariantList weatherData)
 
     // Insert the data into this model.
     append(weatherData);
+
+    // Increment our data index
+    mCursor.index += numberOfItemsReceived;
 }
 
 void WeatherModel::onSslErrors(QNetworkReply * reply, const QList<QSslError> & errors)
@@ -120,7 +123,7 @@ void WeatherModel::requestMoreDataFromNetwork()
         QString encodedCity = QUrl(mCity).toEncoded();
         QString encodedRegion = QUrl(mRegion).toEncoded();
         QUrl path = WeatherHistoryApp::prepareServerUrl("resources/cities/" + encodedRegion + "/" +  encodedCity);
-        path.addQueryItem("start", QString("0"));
+        path.addQueryItem("start", QString("%1").arg(mCursor.index));
 
         WEATHERAPP_LOG("GET " + path.toString());
 
@@ -138,6 +141,9 @@ void WeatherModel::setCity(QString city)
 {
     if (mCity.compare(city) != 0)
     {
+    	// Reset the cursor
+    	mCursor = DataCursor();
+
         // Remove all the old data.
         this->clear();
         mCity = city;
@@ -170,6 +176,9 @@ QString WeatherModel::region()
 
 void WeatherModel::reset()
 {
+    // Reset the cursor
+    mCursor = DataCursor();
+
     // Remove all the old data.
     this->clear();
 

@@ -110,7 +110,7 @@ public:
      * A call to request more data for the current city is made via a
      * call to the requestMoreDataFromNetwork function.
      */
-     void requestMoreDataFromNetwork();
+    Q_INVOKABLE void requestMoreDataFromNetwork();
 
 signals:
 
@@ -176,6 +176,12 @@ private:
     QString mCity;
     QString mRegion;
     bool mInitialLoad;
+
+    struct DataCursor {
+    	DataCursor() : index(0) { }
+
+    	uint index;    	// The current data index for server requests
+    } mCursor;
 };
 
 #endif // ifndef _WEATHERMODEL_H_

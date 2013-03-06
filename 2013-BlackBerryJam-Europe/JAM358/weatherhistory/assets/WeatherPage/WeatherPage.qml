@@ -62,7 +62,7 @@ Page {
                         onAtEndChanged: {
                             if (atEnd) {
                                 // When we are at the end of the list request more data.
-                                //TODO Reqesut more data
+                                weatherList.dataModel.requestMoreDataFromNetwork();
                             }
                         }
                     }
