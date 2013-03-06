@@ -162,6 +162,16 @@ private:
     void loadNetworkReplyDataIntoModel(QVariantList weatherData);
 
     /**
+     * Inserts a temporary load item as a last data item in the model
+     */
+    void insertLoadItem();
+
+    /**
+     * Removes the load item if any that if its there is the last item in the data model.
+     */
+    void removeLoadItem();
+
+    /**
      * Sets the status of the initial load and emits a signal if the status changed
      *
      * @parameter newStatus A boolean of the new status

@@ -35,7 +35,39 @@ WeatherModel::WeatherModel(QObject *parent)
 QString WeatherModel::itemType(const QVariantList& indexPath)
 {
     QString typeName("item");
+    int currentSize = childCount(QVariantList());
+    int itemIndexPath = indexPath[0].toInt();
+
+    if (itemIndexPath == currentSize - 1) {
+        // We only have to check if the item is a loadItem if it is the last entry
+        if(value(itemIndexPath).toMap().contains("loadItem")) {
+            // If the is contains the loadItem return loadItem type
+            typeName = "loadItem";
+        }
+    }
+
     return typeName;
+}
+
+void WeatherModel::insertLoadItem()
+{
+    QVariantMap lastItem  = value(childCount(QVariantList()) - 1).toMap();
+
+    // Insert a load item if there is no item already and not all data has been gathered
+    if(!lastItem.contains("loadItem") && !mCursor.endOfData) {
+        QVariantMap lastItem;
+        lastItem["loadItem"] = QVariant(true);
+        append(lastItem);
+    }
+}
+
+void WeatherModel::removeLoadItem()
+{
+    QVariantMap lastItem  = value(childCount(QVariantList()) - 1).toMap();
+
+    if(lastItem.contains("loadItem")) {
+        removeAt(childCount(QVariantList()) - 1);
+    }
 }
 
 void WeatherModel::httpFinished()
@@ -94,6 +126,7 @@ void WeatherModel::httpFinished()
 void WeatherModel::loadNetworkReplyDataIntoModel(QVariantList weatherData)
 {
 	int numberOfItemsReceived = weatherData.size();
+    removeLoadItem();
 
     WEATHERAPP_LOG(QString("Received %1 entries").arg(numberOfItemsReceived));
 
@@ -116,6 +149,8 @@ void WeatherModel::loadNetworkReplyDataIntoModel(QVariantList weatherData)
 
     // Increment our data index
     mCursor.index += numberOfItemsReceived;
+
+    insertLoadItem();
 }
 
 void WeatherModel::onSslErrors(QNetworkReply * reply, const QList<QSslError> & errors)

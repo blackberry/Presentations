@@ -54,6 +54,11 @@ Page {
                         type: "item"
                         WeatherItem {
                         }
+                    },
+                    ListItemComponent {
+                        type: "loadItem"
+                        WeatherLoadItem {
+                        }
                     }
                 ]
 
@@ -74,4 +79,30 @@ Page {
     function resetToTop(){
         weatherList.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
     }
+    
+    
+    // Orientation related code: in landscape we want to set the title bar to "Overlay" mode
+    /**
+     * @param orientation Must be a value of UIOrientation
+     */
+    function handleOrientationChange(orientation) {
+        if (orientation == UIOrientation.Landscape && !forceVisibleTitleBar) {
+            titleBar.visibility = ChromeVisibility.Overlay;
+        }
+        else {
+            titleBar.visibility = ChromeVisibility.Visible;
+        }
+    }
+    
+    onCreationCompleted: {
+        handleOrientationChange(OrientationSupport.orientation); // pass the current orientation
+    }
+    
+    attachedObjects: [
+        OrientationHandler {
+            onOrientationAboutToChange: {
+                handleOrientationChange(orientation); // pass the new orientation
+            }
+        }
+    ]
 }
