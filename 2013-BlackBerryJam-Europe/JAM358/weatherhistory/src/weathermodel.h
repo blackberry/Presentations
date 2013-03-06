@@ -16,6 +16,10 @@
 #define _WEATHERMODEL_H_
 
 #include <bb/cascades/QListDataModel>
+#include <bb/data/JsonDataAccess>
+#include <QtNetwork/QNetworkReply>
+
+using namespace bb::data;
 
 // The weather model is based on the QListDataModel template, which in turn
 // implements the abstract DataModel class.
@@ -42,6 +46,11 @@ class WeatherModel: public WeatherListModel
      * The region property determines which region should be used for the city.
      */
     Q_PROPERTY(QString region READ region WRITE setRegion NOTIFY regionChanged)
+
+    /**
+     * Property that will when the first batch is being loaded for the model
+     */
+    Q_PROPERTY(bool initialLoad READ initialLoad NOTIFY initialLoadChanged)
 
 public:
 
@@ -90,6 +99,14 @@ public:
     QString region();
 
     /**
+     * This function returns the initial load status, will be true only as long
+     * as the first batch is being loaded into the model.
+     *
+     * @return true if the first load is in progress and no items are present in the model yet
+     */
+    bool initialLoad();
+
+    /**
      * A call to request more data for the current city is made via a
      * call to the requestMoreDataFromNetwork function.
      */
@@ -107,10 +124,58 @@ signals:
      */
     void regionChanged(QString city);
 
+    /**
+     * Signal emitted when the loading status of the first chunk of data changes
+     */
+    void initialLoadChanged(bool initialLoad);
+
+public slots:
+
+    /**
+     * This function completely resets the model and reloads all
+     * data, used if for example the server connection address changed.
+     */
+    void reset();
+
+private slots:
+    /**
+     * This Slot function is called when the network request to the
+     * "weather service" is complete.
+     */
+    void httpFinished();
+
+    /**
+     * This Slot function is connected to the mAccessManager sslErrors signal. This function
+     * allows us to see what errors we get when connecting to the address given by server url.
+     *
+     * @param reply The network reply
+     * @param errors SSL Error List
+     */
+    void onSslErrors(QNetworkReply * reply, const QList<QSslError> & errors);
+
 private:
+    /**
+     * This Helper function used to set up the model data in the JsonDataAccess class
+     *
+     * @param weatherData The QVariantList with weather data that is to be added to the model.
+     */
+    void loadNetworkReplyDataIntoModel(QVariantList weatherData);
+
+    /**
+     * Sets the status of the initial load and emits a signal if the status changed
+     *
+     * @parameter newStatus A boolean of the new status
+     */
+    void setInitialLoad(bool newStatus);
+
+    // The network parameters; used for accessing a file from the Internet
+    QNetworkAccessManager mAccessManager;
+    QNetworkReply *mReply;
+
     // The current city for obtaining mock weather data
     QString mCity;
     QString mRegion;
+    bool mInitialLoad;
 };
 
 #endif // ifndef _WEATHERMODEL_H_

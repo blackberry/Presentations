@@ -101,6 +101,8 @@ void WeatherHistoryApp::createWeatherModel()
     // city property (see WeatherPage.qml and FavoritePage.qml).
     WeatherModel *weatherModel = new WeatherModel(this);
     mQmlDocument->setContextProperty("_weatherModel", weatherModel);
+    connect(this, SIGNAL(serverUrlChanged(QUrl)), weatherModel, SLOT(reset()));
+    connect(this, SIGNAL(maxSizeChanged(uint)), weatherModel, SLOT(reset()));
 }
 
 void WeatherHistoryApp::createFavoritesModel()
@@ -122,6 +124,8 @@ void WeatherHistoryApp::createHomeModel()
     // settings for the home city (so it will be set on the next time the app launches)
     connect(homeModel, SIGNAL(regionChanged(QString)), this, SLOT(onUpdateHomeRegion(QString)));
     connect(homeModel, SIGNAL(cityChanged(QString)), this, SLOT(onUpdateHomeCity(QString)));
+    connect(this, SIGNAL(serverUrlChanged(QUrl)), homeModel, SLOT(reset()));
+    connect(this, SIGNAL(maxSizeChanged(uint)), homeModel, SLOT(reset()));
 
     // Begin loading weather data for the home page, if no hometown is stored in
     // the application settings

@@ -33,6 +33,15 @@ Page {
             layout: DockLayout {
             }
 
+            // An activity indicator that will be shown when weather data is loaded
+            ActivityIndicator {
+                id: dataLoadIndicator
+                preferredWidth: 400
+                preferredHeight: 400
+                horizontalAlignment: HorizontalAlignment.Center
+                running: weatherList.dataModel.initialLoad;
+            }
+
             // The list of weather forecasts
             ListView {
                 id: weatherList
