@@ -22,7 +22,7 @@
 using namespace bb::cascades;
 
 WeatherModel::WeatherModel(QObject *parent)
-: mReply(0), mInitialLoad(false)
+: mReply(0), mInitialLoad(false), mErrorCode(NoError)
 {
 	Q_UNUSED(parent);
 
@@ -108,10 +108,25 @@ void WeatherModel::httpFinished()
 		if (mCursor.index == 0) {
 			// If we requested index 0 and didn't get an empty array it means the city does not exist and we should show an error
 			mCursor.endOfData = true;
+			setErrorCode(WeatherModel::InvalidCity);
 		} else {
 			// If we get a 404 in the middle of a data set it simply means there is no more data
 			mCursor.endOfData = true;
 		}
+		break;
+	case 503:
+		// TODO: perhaps try again a few times and eventually just stop? if we end up stopping and the list is empty, show an alert message. if the list isn't empty just stop fetching
+		setErrorCode(WeatherModel::ServerBusy);
+		break;
+	case -2:
+		setErrorCode(WeatherModel::JsonError);
+		mCursor.endOfData = true;
+		break;
+	case 500:
+	default:
+		// TODO: the server crapped out, if we don't have any entries let the user know an error occurred, otherwise just stop fetching
+		mCursor.endOfData = true;
+		setErrorCode(WeatherModel::ServerError);
 		break;
 	}
 
@@ -191,7 +206,7 @@ void WeatherModel::requestMoreDataFromNetwork()
 
 void WeatherModel::setCity(QString city)
 {
-    if (mCity.compare(city) != 0)
+    if (mCity.compare(city) != 0 || mErrorCode != WeatherModel::NoError)
     {
     	// Reset the cursor
     	mCursor = DataCursor();
@@ -249,7 +264,24 @@ bool WeatherModel::initialLoad()
 void WeatherModel::setInitialLoad(bool newStatus)
 {
     if(newStatus != mInitialLoad) {
+        if(newStatus){
+            // Only set the error code to no error if when the initial is started.
+            setErrorCode(WeatherModel::NoError);
+        }
         mInitialLoad = newStatus;
         emit initialLoadChanged(mInitialLoad);
     }
 }
+
+WeatherModel::WeatherModelError WeatherModel::errorCode()
+{
+    return mErrorCode;
+}
+
+void WeatherModel::setErrorCode(WeatherModel::WeatherModelError error)
+{
+    mErrorCode = error;
+    errorCodeChanged(mErrorCode);
+}
+
+

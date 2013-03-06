@@ -42,6 +42,8 @@ WeatherHistoryApp::WeatherHistoryApp()
     // Now that the QSettings are set up, store the default values
     QSettings settings;
 
+    qmlRegisterUncreatableType <WeatherModel>("bb.cascades", 1, 0, "WeatherModel", "Uncreatable type");
+
     if (settings.value(SERVER_URL_SETTINGS_KEY).isNull()) {
     	setServerUrl(mDefaultServerUrl);
 	}

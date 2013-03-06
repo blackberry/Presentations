@@ -20,6 +20,7 @@ Page {
     id: weather
     property alias city: titleBar.title
     property alias weatherData: weatherList.dataModel
+    property variant error: weatherList.dataModel.errorCode
 
     titleBar: TitleBar {
         id: titleBar
@@ -74,35 +75,42 @@ Page {
                 ]
             }
         }
+        
+        ErrorMessage {
+            id: errorMessage
+            horizontalAlignment: HorizontalAlignment.Fill
+            verticalAlignment: VerticalAlignment.Top
+            visible: false
+        }
+    }
+
+    // onErrorChanged is automagically bound to the "property variant error" and is fired when it changes
+    onErrorChanged: {
+        var showErrorPage = true;
+        var errorText = ""
+        
+        if(error == WeatherModel.ServerError) {
+            errorText = qsTr("Sorry no fish, there was an error on the server.")
+        } else if(error == WeatherModel.ServerBusy){
+            errorText = qsTr("Hmm, looks like the server is busy right now, please try again later.")
+        } else if (error == WeatherModel.JsonError) {
+            errorText = qsTr("Something strange is going on, I can not give you any data right now.")
+        } else if (error == WeatherModel.InvalidCity) {
+            errorText = qsTr("You seem lost, the city you are looking for is not there, check the map again.")
+        } else if (error == WeatherModel.NoError || error == undefined) {
+            showErrorPage = false
+        }
+
+        if(showErrorPage) {
+            errorMessage.message = errorText
+            errorMessage.show.play();
+            listviewContainer.setVisible(false);
+            forceVisibleTitleBar = true; // when we display the error page, we don't want it hiding behind the titlebar if we are in landscape
+            handleOrientationChange(OrientationSupport.orientation); // pass the current orientation
+        }
     }
     
     function resetToTop(){
         weatherList.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
     }
-    
-    
-    // Orientation related code: in landscape we want to set the title bar to "Overlay" mode
-    /**
-     * @param orientation Must be a value of UIOrientation
-     */
-    function handleOrientationChange(orientation) {
-        if (orientation == UIOrientation.Landscape && !forceVisibleTitleBar) {
-            titleBar.visibility = ChromeVisibility.Overlay;
-        }
-        else {
-            titleBar.visibility = ChromeVisibility.Visible;
-        }
-    }
-    
-    onCreationCompleted: {
-        handleOrientationChange(OrientationSupport.orientation); // pass the current orientation
-    }
-    
-    attachedObjects: [
-        OrientationHandler {
-            onOrientationAboutToChange: {
-                handleOrientationChange(orientation); // pass the new orientation
-            }
-        }
-    ]
 }

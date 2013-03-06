@@ -37,6 +37,11 @@ class WeatherModel: public WeatherListModel
     Q_OBJECT
 
     /**
+     * Make the errors enum available in the property system
+     */
+    Q_ENUMS(WeatherModelError)
+
+    /**
      * The city property determines which weather data file is requested
      * from the remote server.
      */
@@ -52,7 +57,14 @@ class WeatherModel: public WeatherListModel
      */
     Q_PROPERTY(bool initialLoad READ initialLoad NOTIFY initialLoadChanged)
 
+    Q_PROPERTY(WeatherModel::WeatherModelError errorCode READ errorCode NOTIFY errorCodeChanged)
+
+
 public:
+    /**
+     * Error values
+     */
+    enum WeatherModelError { NoError = 0, ServerError, ServerBusy, JsonError, InvalidCity };
 
     /**
      * This is our constructor. This class inherits from GroupDataModel. The parent object is set,
@@ -106,6 +118,8 @@ public:
      */
     bool initialLoad();
 
+    WeatherModel::WeatherModelError errorCode();
+
     /**
      * A call to request more data for the current city is made via a
      * call to the requestMoreDataFromNetwork function.
@@ -123,6 +137,11 @@ signals:
      * Signal emitted when the region property has changed value.
      */
     void regionChanged(QString city);
+
+    /**
+     * Signal emitted when the network error status changes.
+     */
+    void errorCodeChanged(WeatherModel::WeatherModelError error);
 
     /**
      * Signal emitted when the loading status of the first chunk of data changes
@@ -178,6 +197,13 @@ private:
      */
     void setInitialLoad(bool newStatus);
 
+    /**
+     * Sets the error code and emits a signal that the error code has changed
+     *
+     * @parameter error the new error
+     */
+    void setErrorCode(WeatherModel::WeatherModelError error);
+
     // The network parameters; used for accessing a file from the Internet
     QNetworkAccessManager mAccessManager;
     QNetworkReply *mReply;
@@ -186,6 +212,7 @@ private:
     QString mCity;
     QString mRegion;
     bool mInitialLoad;
+    WeatherModelError mErrorCode;
 
     struct DataCursor {
     	DataCursor() : index(0), endOfData(false) { }
