@@ -6,12 +6,14 @@ device {
         SOURCES +=  $$quote($$BASEDIR/src/citymodel.cpp) \
                  $$quote($$BASEDIR/src/favoritemodel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp) \
-                 $$quote($$BASEDIR/src/weatherhistoryapp.cpp)
+                 $$quote($$BASEDIR/src/weatherhistoryapp.cpp) \
+                 $$quote($$BASEDIR/src/weathermodel.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/citymodel.h) \
                  $$quote($$BASEDIR/src/favoritemodel.h) \
                  $$quote($$BASEDIR/src/logging.h) \
-                 $$quote($$BASEDIR/src/weatherhistoryapp.h)
+                 $$quote($$BASEDIR/src/weatherhistoryapp.h) \
+                 $$quote($$BASEDIR/src/weathermodel.h)
 
     }
 
@@ -19,12 +21,14 @@ device {
         SOURCES +=  $$quote($$BASEDIR/src/citymodel.cpp) \
                  $$quote($$BASEDIR/src/favoritemodel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp) \
-                 $$quote($$BASEDIR/src/weatherhistoryapp.cpp)
+                 $$quote($$BASEDIR/src/weatherhistoryapp.cpp) \
+                 $$quote($$BASEDIR/src/weathermodel.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/citymodel.h) \
                  $$quote($$BASEDIR/src/favoritemodel.h) \
                  $$quote($$BASEDIR/src/logging.h) \
-                 $$quote($$BASEDIR/src/weatherhistoryapp.h)
+                 $$quote($$BASEDIR/src/weatherhistoryapp.h) \
+                 $$quote($$BASEDIR/src/weathermodel.h)
 
     }
 
@@ -35,12 +39,14 @@ simulator {
         SOURCES +=  $$quote($$BASEDIR/src/citymodel.cpp) \
                  $$quote($$BASEDIR/src/favoritemodel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp) \
-                 $$quote($$BASEDIR/src/weatherhistoryapp.cpp)
+                 $$quote($$BASEDIR/src/weatherhistoryapp.cpp) \
+                 $$quote($$BASEDIR/src/weathermodel.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/citymodel.h) \
                  $$quote($$BASEDIR/src/favoritemodel.h) \
                  $$quote($$BASEDIR/src/logging.h) \
-                 $$quote($$BASEDIR/src/weatherhistoryapp.h)
+                 $$quote($$BASEDIR/src/weatherhistoryapp.h) \
+                 $$quote($$BASEDIR/src/weathermodel.h)
 
     }
 
