@@ -1,0 +1,132 @@
+
+<root>
+<item name="Hawk's Landing Steakhouse" 
+location="8701 World Center Drive Orlando, Florida 32821" 
+description="Overlooking the beautiful championship golf course, this contemporary Orlando steakhouse offers the finest cuts of Harris Ranch prime dry-aged beef and fresh local seafood."
+
+phone="407-238-8829"
+email="MCOWC.info@marriott.com"
+web="http://www.marriottworldcenter.com/dining/hawks-landing-steakhouse.aspx" 
+menu="hawks.xml"
+image="hawks_logo.gif" 
+/>
+
+<item name="Mikado Japanese Steak House" 
+location="8701 World Center Drive Orlando, Florida 32821" 
+description="Enjoy great food at one of the best Orlando Florida Japanese restaurants - along with exciting live entertainment provided by one of the skilled teppan-yaki chefs. Watch as your meal is prepared tableside."
+phone= "407-238-8829"
+email= "MCOWC.info@marriott.com"
+web="http://www.marriottworldcenter.com/dining/mikado-japanese-steak-house.aspx" 
+menu="mikado.xml" 
+image="mikado_logo.gif"
+/>
+
+<item name="Solaris Restaurant" 
+location="8701 World Center Drive Orlando, Florida 32821" 
+description="Featuring a world-class breakfast buffet with over 80 items daily, including Belgian waffles, sour-cream pancakes, Artisan meats and cheeses, as well as our a la carte menu selection. It is a casual setting filled with pleasant surprises. Kids under four eat free."
+phone="407-238-8829"
+email="MCOWC.info@marriott.com"
+web="http://www.marriottworldcenter.com/dining/solaris-restaurant.aspx" 
+menu="solaris.xml" 
+image="solaris_logo.gif"
+/>
+
+
+<item 
+name="Planet Hollywood Orlando" 
+location="1506 E. Buena Vista Drive, Lake Buena Vista, FL 32830" 
+description="Planet Hollywood offers an extensive Hollywood memorabilia collection featuring props from blockbuster movies and classic TV shows, while the diverse menu offers all of your favorites. Exotic salads and award-winning burgers are only a few of the many signature flavors you'll find."
+phone= "407-827-7827"
+email="groupreservations@planethollywoodintl.com"
+web="http://www.planethollywoodintl.com/locations_orlando.php" 
+menu="planet.xml"
+image="planet_logo.png" 
+/>
+
+<item name="Bongos Cuban Cafe" 
+location="1498 East Buena Vista Drive, Lake Buena Vista, FL 32830" 
+description="This magnificent restaurant and nightclub first opened in 1997 in Downtown Disney at the Walt Disney World Resort in Orlando, a metropolis of fun! The building's Old Havana architecture is dominated by a massive pineapple-shaped adobe structure that fills the skyline of Downtown Disney."
+phone= "407-828-0999"
+email= "GRodriguez@bongoscubancafe.com"
+web= "http://www.bongoscubancafe.com/restaurants/locations/orlando.html" 
+menu="bongos.xml"
+image="bongos_logo.png" 
+/>
+
+<item name="Raglan Road Irish Pub" 
+location="1640 E Buena Vista Drive, Lake Buena Vista, Florida 32830" 
+description="Before it became the name of our establishment, Raglan Road became a song – a collaboration of sorts, which combined Patrick Kavanagh's poem, Dark Haired Miriam Ran Away, with the traditional Irish air, The Dawning of the Day."
+phone= "407-938-0300"
+email= "hello@raglanroad.com"
+web= "http://www.raglanroad.com" 
+menu="raglan.xml"
+image="raglan_logo.jpg" 
+/>
+
+<item name="falafel Moroccan Restaurant" 
+location="13605 South Apopka Vineland Road, Orlando, FL 32821" 
+description="We invite you to spend some time under the spell of a charming traditional dwelling, to savour a typical refined cuisine, and some succulent dishes meticulously prepared by our Executive Chefs.  Dine in or takeout with Falafel Restaurant"
+phone= "407-238-1600"
+email= "Falafelmarket@gmail.com"
+web= "falafelmarket.com" 
+menu="falafel.xml" 
+image="falafel_logo.png"
+/>
+
+
+
+<item name="China 3" 
+location="11981 S. Apopka Vineland Rd. Orlando Florida. 32836" 
+description="Truly the best Halal Chinese Restaurant in Orlando Florida."
+
+phone= "407-465-0788" 
+email= "NoEmail"
+web= "http://orlando-halal-food.com" 
+menu="china3.xml" 
+image="china3_logo.png"
+/>
+
+<item name="Viet Garden" 
+location="1237 East Colonial Drive, Orlando, Florida, 32803"
+description="We are pleased to serve you the two most popular cuisines from Vietnam and Thailand, with an airy dinning atmosphere that makes your dining experience a memorable one."
+phone= "407-896-4154" 
+email= "NoEmail"
+web= "http://www.vietgardenorlando.com" 
+menu="vietgarden.xml"
+image="vietgarden_logo.png" 
+/>
+
+<item name="Pho Hoa" 
+location="649 North Primrose Drive, Orlando, FL 32803"
+description="Founded nearly three decades ago on the principles of exceptional value, quality and service, Pho Hoa Noodle Soup operates what is today the largest Vietnamese fast-casual dining chain in the world."
+phone= "407-895-6098"
+email= "NoEmail"
+web= "http://www.phohoaeats.com"
+menu="phohoa.xml"  
+image="phohoa_logo.png"
+/>
+
+<item name="Sleuths Mystery Dinner Show" 
+location="8267 International Drive, Orlando, FL 32819"
+description="Step Into A World Of Comedy. Where You Become The Detective!"
+phone= "800-393-1985" 
+email= "info@sleuths.com"
+web= "http://www.sleuths.com" 
+menu="sleuths.xml" 
+image="sleuths_logo.png"
+/>
+
+
+<item name="Mambella's" 
+location="160 Columbia St. West, Waterloo, Ontario, N2L 3L3" 
+description="Do you want it?  Come and get it!"
+
+phone= "519-885-2244" 
+email= "mambellas@golden.net"
+web= "http://www.mambellas.com" 
+menu="mambellas.xml"
+image="mambellas_logo.png" 
+/>
+
+</root>
+
