@@ -1,0 +1,1 @@
+include (../TheGame.pro)
