@@ -1,0 +1,6 @@
+[
+{ "name":"bonus","fileName":"sounds/bonus.wav","category":"fx"},
+{ "name":"klick1","fileName":"sounds/klick1.wav","category":"fx"},
+{ "name":"klick2","fileName":"sounds/klick2.wav","category":"fx"},
+{ "name":"song1","fileName":"sounds/song1.wav","category":"music"}
+]
