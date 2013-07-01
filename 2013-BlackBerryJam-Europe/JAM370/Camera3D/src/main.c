@@ -1440,13 +1440,13 @@ int main(int argc, char *argv[]) {
     for (i=0; i<num; i++) {
         fprintf(stderr, "Supported resolution: %d x %d\n", res[i].width, res[i].height);
         if (res[i].width > res[i].height) {
-            if ((fabs(res[i].height - 480) < fabs(res[best].height - 480)) &&
-                (fabs(res[i].width - 640) < fabs(res[best].width - 640))) {
+            if ((fabs(res[i].height - 480) <= fabs(res[best].height - 480)) &&
+                (fabs(res[i].width - 640) <= fabs(res[best].width - 640))) {
                 best = i;
             }
         } else {
-            if ((fabs(res[i].width - 480) < fabs(res[best].width - 480)) &&
-                (fabs(res[i].height - 640) < fabs(res[best].height - 640))) {
+            if ((fabs(res[i].width - 480) <= fabs(res[best].width - 480)) &&
+                (fabs(res[i].height - 640) <= fabs(res[best].height - 640))) {
                 best = i;
             }
         }
