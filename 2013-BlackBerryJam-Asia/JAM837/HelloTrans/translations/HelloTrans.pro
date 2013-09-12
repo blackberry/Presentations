@@ -1,0 +1,1 @@
+include (../HelloTrans.pro)
