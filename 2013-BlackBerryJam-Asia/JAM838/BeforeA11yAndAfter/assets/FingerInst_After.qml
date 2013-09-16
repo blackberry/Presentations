@@ -37,11 +37,11 @@ Page {
                 textStyle.fontSize: FontSize.XXLarge
             }
             Label {
-                text: qsTr("<html>You won a million dollars! Please <b>continue on</b> to learn how you can recieve your money.</html>") + Retranslate.onLocaleOrLanguageChanged
+                text: qsTr("<html>You won a million dollars! </html>") + Retranslate.onLocaleOrLanguageChanged
                 multiline: true
             }
             Button {
-                text: qsTr("Continue") + Retranslate.onLocaleOrLanguageChanged
+                text: qsTr("Get the Money!") + Retranslate.onLocaleOrLanguageChanged
                 attachedObjects: [
                     SystemToast {
                         id: milliondollars
