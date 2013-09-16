@@ -1,5 +1,5 @@
 1
-42
+39
 FingerInst_Before.qml
 CustomCtrlInCPlusPlus_Before.qml
 ColorOnly_Intro.qml
@@ -20,14 +20,11 @@ Acronyms_After.qml
 FingerInst_After.qml
 FontSize_After.qml
 data.xml
-Intro.qml
 main.qml
 ColorOnly_Before.qml
-joe.png
 left.png
 CustomA11yObject_Before.qml
 ControlsWithOnTouch_Intro.qml
-left.jpg
 david.png
 PunctuationReference_Intro.qml
 LabellingRel_Intro.qml
