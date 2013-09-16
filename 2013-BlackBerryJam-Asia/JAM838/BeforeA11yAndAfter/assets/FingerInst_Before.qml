@@ -39,7 +39,7 @@ Page {
             }
             Label {
                 //BAD: instructions to tap.  When screenreader is on these instructions will not work.
-                text: qsTr("<html>You won a million dollars! Please <b>tap the Continue Button</b> with your finger to learn how you can recieve your money.</html>") + Retranslate.onLocaleOrLanguageChanged
+                text: qsTr("<html>You won a million dollars! Please <b>tap the Continue Button</b> with your finger to learn how you can receive your money.</html>") + Retranslate.onLocaleOrLanguageChanged
                 multiline: true
             }
             Button {
