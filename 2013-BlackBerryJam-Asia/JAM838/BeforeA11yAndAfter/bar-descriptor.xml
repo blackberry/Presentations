@@ -61,6 +61,7 @@
         <autoOrients>true</autoOrients>
         <systemChrome>none</systemChrome>
         <transparent>false</transparent>
+        <cascadesTheme>bright</cascadesTheme>
     </initialWindow>
     
     <!--  The category where the application appears. Either core.games or core.media. -->
