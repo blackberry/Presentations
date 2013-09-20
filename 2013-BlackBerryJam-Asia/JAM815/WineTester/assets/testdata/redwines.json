@@ -1,0 +1,50 @@
+[
+   {
+    "name":"Goulet's Epic Merlot",
+    "description":"This wine is over 9000!!!1! Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.",
+    "date":"December 4th, 2008",
+    "logo":"asset:///images/labels/label_Maroc.jpeg"
+   },
+   {
+    "name":"Cabarnet Rouge d'Ottawa",
+    "description":"Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis.",
+    "date":"January 12th, 2004",
+    "logo":"asset:///images/labels/label_Noilly.jpeg"
+   },
+   {
+    "name":"Shiraz No.3",
+    "description":"Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. ",
+    "date":"August 7th, 1999",
+    "logo":"asset:///images/labels/label_Tajik1950.jpeg"
+   },
+   {
+    "name":"Chianti Red",
+    "description":"Sed lectus. Integer euismod lacus luctus magna",
+    "date":"September 23rd, 2002",
+    "logo":"asset:///images/labels/label_Tavares.jpeg"
+   },
+   {
+    "name":"Chianti Moar Red",
+    "description":"Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. ",
+    "date":"May 2nd, 2005",
+    "logo":"asset:///images/labels/label_Tokaj_1910.jpeg"
+   },
+   {
+    "name":"Shiraz No.34",
+    "description":"Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. ",
+    "date":"August 7th, 1999",
+    "logo":"asset:///images/labels/label_Tajik1950.jpeg"
+   },
+   {
+    "name":"Chianti Red 2",
+    "description":"Sed lectus. Integer euismod lacus luctus magna",
+    "date":"September 23rd, 2002",
+    "logo":"asset:///images/labels/label_Tavares.jpeg"
+   },
+   {
+    "name":"Chianti Moar Red 5",
+    "description":"Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. ",
+    "date":"May 2nd, 2005",
+    "logo":"asset:///images/labels/label_Tokaj_1910.jpeg"
+   }
+]
