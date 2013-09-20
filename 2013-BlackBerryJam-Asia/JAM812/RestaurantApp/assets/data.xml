@@ -1,0 +1,150 @@
+
+<root>
+<item name="Star Seafood Floating Restaurant" 
+location="55 Tai Chung Kiu Road, Sha Tin, Hong Kong" 
+description="Guangdong  /  Dim Sum  /  Chinese Restaurant  /  Dim Sum Restaurant  /  Drivers Friendly Dining  /  Group Dining."
+
+phone="+852 2635 3788"
+email="star@maxims.com.hk"
+web="http://www.openrice.com/english/restaurant/sr2.htm?shopid=3802" 
+menu="starfloating.xml"
+image="starfloating.jpg" 
+/>
+
+<item name="Tsui Wah" 
+location="15 Wellington Street, Hong Kong‎" 
+description="Meatless tea restaurant"
+phone= "+852 2525 6338"
+email= "tsuiwah@openrice.com"
+web="http://www.openrice.com/english/restaurant/sr2.htm?shopid=3837" 
+menu="tsuiwah.xml" 
+image="tsuiwah.jpg"
+/>
+
+<item name="Kau Kee Restaurant" 
+location="21 Gough Street, Hong Kong" 
+description="With over 90 years of history on Gough Street, Kau Kee still never fails to deliver its most popular Beef Brisket Noodles in Clear Broth. What distinguishes Kau Kee from other noodle restaurants is that they only serve Beef Brisket in Clear broth and curry soup."
+phone="+852 2850 5967"
+email="kaukee@openrice.com"
+web="http://www.openrice.com/english/restaurant/sr2.htm?shopid=1618" 
+menu="kaukee.xml" 
+image="kaukee.jpg"
+/>
+
+
+<item 
+name="L'Atelier de Joël Robuchon" 
+location="16 Des Voeux Road, Hong Kong" 
+description="Joel Robuchon was the most influential French chef of the post-nouvelle cuisine era. Commonly regarded as the primus inter pares of Paris' 3 star chefs for his work, a meal at Robuchon's restaurant had always been known to be of relentless perfectionism."
+phone= "+852 2166 9088"
+email="robuchon@openrice.com"
+web="http://www.openrice.com/english/restaurant/sr2.htm?shopid=17506" 
+menu="robuchon.xml"
+image="robuchon.jpg" 
+/>
+
+<item name="Kung Lee" 
+location="60 Hollywood Road, Hong Kong" 
+description="The place for desserts. Be sure to try the sugarcane juice."
+phone= "+852 2544 3571"
+email= "kunglee@openrice.com"
+web= "http://www.openrice.com/english/restaurant/sr2.htm?shopid=10072" 
+menu="kunglee.xml"
+image="kunglee.jpg" 
+/>
+
+<item name="千燒百味" 
+location="赤鱲角香港國際機場翔天廊第三層3P118號舖" 
+description="一向只會因趕時間或無選擇的情況下，才惠顧快餐店。千燒百味是屬於香港一家快餐集團旗下的食肆。"
+phone=  "+852 3197 9058"
+email= ""
+web= "http://www.openrice.com/english/restaurant/sr2.htm?shopid=18062" 
+menu="3P118.xml"
+image="3P118.jpg" 
+/>
+
+<item name="Pierre at the Mandarin" 
+location="Connaught Road, Hong Kong" 
+description="Long renowned as Hong Kong’s favourite dining room, The Grill serves an exciting adaptation of grill specialties with a dash of progressive gastronomy from the talented Executive Chef Uwe Opocensky, Expect to pay $500."
+phone= "+825 2825 4001"
+email= "pierre@openrice.com"
+web= "http://www.mandarinoriental.com/hongkong/fine-dining/pierre/" 
+menu="mandarin.xml" 
+image="mandarin.jpg"
+/>
+
+<item name="The Peak Lookout" 
+location="121 Peak Road, Hong Kong" 
+description="Located in a heritage house at Victoria Gap, near the summit of Victoria Peak on Hong Kong Island"
+phone= "+825 2849 1000"
+email= "info@peaklookout.com.hk"
+web= "http://www.peaklookout.com/" 
+menu="peaklookout.xml" 
+image="peaklookout.jpg"
+/>
+
+<item name="Mak's Noodle" 
+location="77 Wellington Street, Hong Kong" 
+description="The soup base is made of powdered dried flounder, dried shrimp roe and pork bones. The small serving bowls keep the noodles from going soggy."
+phone= "+825 2854 3810"
+email= ""
+web= "http://www.openrice.com/english/restaurant/sr2.htm?shopid=1998" 
+menu="mak.xml" 
+image="mak.jpg"
+/>
+
+<item name="Lab Made Liquid Nitrogen Ice Cream Laboratory" 
+location="6 Brown Street, Tai Hang, Hong Kong" 
+description="They use dry ice to make the ice cream and every now and then the ice vapor will spill over the counter onto the street to the 'oohs' and 'aahs' of the spectators."
+phone= "+825 2670 0071"
+email= "liquidnitrogen@openrice.com"
+web= "http://www.openrice.com/english/restaurant/sr2.htm?shopid=106755" 
+menu="nitrogen.xml" 
+image=""
+/>
+
+<item name="Yung Kee" 
+location="32 Wellington Street, Hong Kong" 
+description="Yung Kee is most famous for its roast goose, and serves as many as 300 whole birds per day."
+phone= "+825 2522 1624"
+email= "yungkee@openrice.com"
+web= "http://www.yungkee.com.hk/" 
+menu="yungkee.xml" 
+image="yungkee.jpg"
+/>
+
+<item name="Heichinrou" 
+location="41 Connaught Road, Central, Hong Kong" 
+description="Established in 1884"
+phone= "+825 2868 9229"
+email= "heichinrou@openrice.com"
+web= "http://www.heichinrou.com" 
+menu="heichinrou.xml" 
+image="heichinrou.gif"
+/>
+
+<item name="Joy Hing Roasted Meat" 
+location=" 265 Hennessy Road, Wan Chai , Hong Kong" 
+description="Chinese barbecue. A popular and well known eatery and most of the time, very difficult to find a spare table."
+phone= "+825 2519 6639"
+email= "joyhing@openrice.com"
+web= "http://www.openrice.com/english/restaurant/sr2.htm?shopid=1491" 
+menu="joyhing.xml" 
+image="joyhing.jpg"
+/>
+
+
+<item name="Mambella's" 
+location="160 Columbia St. West, Waterloo, Ontario, N2L 3L3" 
+description="Do you want it?  Come and get it!"
+
+phone= "+1 519-885-2244" 
+email= "mambellas@golden.net"
+web= "http://www.mambellas.com" 
+menu="mambellas.xml"
+image="mambellas_logo.png" 
+/>
+
+
+</root>
+

@@ -1,0 +1,8 @@
+<root> 
+<item name="Jambon-fromage" description="Ham and cheese in a baguette" image="robuchon_food.jpg"/>
+<item name="Scones" description="Natural, lemon or raisin scones with Devonshire cream and jam" image="robuchon_food.jpg"/>
+<item name="Salmon and caviar sandwich" description="Norwegian smoked salmon and caviar sandwich" image="robuchon_food.jpg"/>
+<item name="Lobster and tarragon sandwich" description="Pruned lobster meat, tarragon and mayonnaise in a white bread sandwich" image="robuchon_food.jpg"/>
+<item name="Tuna and poached egg sandwich" description="Fresh tuna on sliced poached eggs in a sandwich" image="robuchon_food.jpg"/>
+<item name="Paris-Brest" description="Chocolate in choux pastry topped with glazing" image="robuchon_food.jpg"/>
+</root> 
