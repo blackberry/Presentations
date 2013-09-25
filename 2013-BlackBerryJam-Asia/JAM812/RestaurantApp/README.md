@@ -1,8 +1,14 @@
-Material from Session: JAM812 - Cascades 301: Creating Adaptive UI/UX for Multiple Form Factors
+Material from Session: JAM812 - Build an App in 60 Minutes with Cascades
 
-Presenters: David Clayworth
+Presenters: Anthony Hu and David Clayworth
 
-Abstract: One app, multiple devices! Attend this session to learn best practices for
-writing apps in Cascades™ that utilize the different aspect ratios and feature-sets
-of all BlackBerry® 10 devices. This session is intended for developers with an existing knowledge of Cascades.
+Abstract: The Cascades™ toolkit lets you develop clean, performant applications
+that integrate seamlessly with the BlackBerry® look and feel. It is also designed
+to maximize your productivity, making app creation easier than it has ever been before.
+In a single session we will show you how you can code a full-functional native
+BlackBerry app using the Cascades toolkit. Taking existing data, we will generate
+a user interface from scratch using QML, integrating it with the BlackBerry platform
+and making it ready for publication and Built for BlackBerry certification.
+This session will touch on tools and techniques needed to develop for Cascades,
+but is not intended as an introduction to Cascades development.
 This sample is part of the material for the session.
