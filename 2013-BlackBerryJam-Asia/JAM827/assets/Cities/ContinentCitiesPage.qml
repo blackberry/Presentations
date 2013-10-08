@@ -40,6 +40,7 @@ Page {
                     // When a non header item is selected, we push the Weather page for the city.
                     var chosenItem = dataModel.data(indexPath);
                     var weatherPage = weatherPageDefinition.createObject();
+                    weatherPage.setLocation(chosenItem.region, chosenItem.city);
                     nav.push(weatherPage);
                 }
             }
@@ -53,9 +54,6 @@ Page {
             query: SqlHeaderDataQuery {
                 id: cityQuery
                 source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db";
-                query: "SELECT * FROM cities ORDER by city";
-                countQuery: "SELECT count(*) FROM cities";
-                headerQuery: "SELECT substr(city, 1, 1) AS header, count(*) FROM cities GROUP BY header";
 
                 onError: {
                     console.log("query error: " + code + ", " + message);
@@ -68,7 +66,30 @@ Page {
         }
     ]
     
-    onCreationCompleted: {
+    function setLocation(cityContinent) {  
+        // This page is created via a ComponentDefinition so we wait until we know the continent
+        // before we can set up the SqlDataQuery properties (they can only be set once).
+        continent = cityContinent;
+        
+        // The page is showing weather for a specfic city and region.
+        cityQuery.bindValues = {
+            "continent": continent
+        }
+        
+        if(continent == "All cities") {
+            // Special case, the all continetnts category was selected.
+            cityQuery.query = "SELECT * FROM cities ORDER by city";
+            cityQuery.countQuery = "SELECT count(*) FROM cities";
+            cityQuery.headerQuery = "SELECT substr(city, 1, 1) AS header, count(*) FROM cities GROUP BY header";
+            
+        } else {
+            // Set up a query to get cities belonging to a specific continent.
+            cityQuery.query = "SELECT * FROM cities WHERE region=:continent ORDER by city";
+            cityQuery.countQuery = "SELECT count(*) FROM cities WHERE region=:continent";
+            cityQuery.headerQuery = "SELECT substr(city, 1, 1) AS header, count(*) FROM cities WHERE region=:continent GROUP BY header";            
+        }
+
+		// Load the data.        
         cityModel.load();
     }
 }

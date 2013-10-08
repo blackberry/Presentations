@@ -41,19 +41,30 @@ Page {
             query: SqlDataQuery {
                 id: sqlDataQuery
                 source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db"
-                query: "SELECT * FROM weather WHERE city=:city AND region=:region ORDER by date DESC";
-                countQuery: "SELECT count(*) from weather WHERE city=:city AND region=:region"
-
-                bindValues: {
-                    "weather": "weather",
-                    "city": city,
-                    "region": region
-                }
             }
         }
     ]
 
     onCreationCompleted: {
+        if (homeWeather && city != "" && region != "") {
+            setLocation(region, city);
+        }
+    }
+
+    function setLocation(weatherRegion, weatherCity) {
+        // The properties of a SqlDataQuery can only be set once, so we do it once we have the city and region.
+        region = weatherRegion;
+        city = weatherCity;
+
+        // The page is showing weather for a specfic city and region.
+        sqlDataQuery.bindValues = {
+            "weather": "weather",
+            "city": city,
+            "region": region
+        }
+
+        sqlDataQuery.query = "SELECT * FROM weather WHERE city=:city AND region=:region ORDER by date DESC";
+        sqlDataQuery.countQuery = "SELECT count(*) from weather WHERE city=:city AND region=:region";
         weatherModel.load();
     }
     

@@ -62,6 +62,7 @@ NavigationPane {
                     // Then navigation to a list of the cities in the selected continent.
                     var continentCitiesPage = continentCitiesPageDefinition.createObject();
                     continentCitiesPage.nav = continentsNav;
+                    continentCitiesPage.setLocation(chosenItem.name);
                     
                     // Finally push the new Page.
                     continentsNav.push(continentCitiesPage);

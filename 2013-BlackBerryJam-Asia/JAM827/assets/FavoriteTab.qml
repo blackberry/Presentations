@@ -38,6 +38,7 @@ NavigationPane {
                     
                     // Create the WeatherPage and set its properties, then push it to the NavigaitonPane.
                     var weatherPage = weatherPageDefinition.createObject();   
+                    weatherPage.setLocation(chosenItem.region, chosenItem.city);
                     favNav.push(weatherPage);
                 }
             }
