@@ -35,7 +35,7 @@ Page {
     }
 
     attachedObjects: [
-        SimpleQueryDataModel {
+        AsyncDataModel {
             id: weatherModel
 
             query: SqlDataQuery {
