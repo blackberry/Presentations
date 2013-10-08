@@ -1,0 +1,1 @@
+include (../QMLComponentSolution.pro)
