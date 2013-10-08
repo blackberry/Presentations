@@ -14,7 +14,8 @@
  */
 #include "weatherhistoryapp.h"
 #include "appsettings.h"
-#include "data/globalconnection.h"
+
+#include "data/weatherdatasource.h"
 
 #include <bb/cascades/LocaleHandler>
 #include <bb/cascades/TabbedPane>
@@ -22,6 +23,8 @@
 
 WeatherHistoryApp::WeatherHistoryApp()
 {
+	qmlRegisterType<WeatherDataSource>("utils", 1, 0, "WeatherDataSource");
+
     // Prepare localization.Connect to the LocaleHandlers systemLanguaged change signal, this will
     // tell the application when it is time to load a new set of language strings.
     mTranslator = new QTranslator(this);
@@ -34,9 +37,6 @@ WeatherHistoryApp::WeatherHistoryApp()
 
     // The application settings object that stores application wide persistent data.
     mAppSettings = new AppSettings(this);
-
-    // Initiate the sql connection to set up the data base in the app data folder.
-    GlobalConnection::instance()->sqlConnection();
 
     mQmlDocument->setContextProperty("_app", this);
     mQmlDocument->setContextProperty("_appSettings", mAppSettings);

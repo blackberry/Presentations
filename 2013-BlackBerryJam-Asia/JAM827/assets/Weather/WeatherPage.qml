@@ -14,6 +14,7 @@
  */
 import bb.cascades 1.2
 import bb.cascades.datamanager 1.2
+import utils 1.0
 
 // The Weather page; where weather data is presented in a list with custom items.
 Page {
@@ -41,6 +42,31 @@ Page {
             query: SqlDataQuery {
                 id: sqlDataQuery
                 source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db"
+                keyColumn: "weatherid"
+
+                // Make sure there is revision_id in the query, otherwise listview will not update smoothly
+                revisionColumn: "revision_id"
+                revisionQuery: "SELECT revision_id FROM revision WHERE table_name=:weather"
+            }
+
+            onLoaded: {
+                // If no items by this time make request for loading items.
+                var childCount = weatherModel.childCount(weatherList.rootIndexPath);
+                if (childCount == 0) {
+                    weatherDataSource.requestWeatherData();
+                }
+            }
+        },
+        WeatherDataSource {
+            id: weatherDataSource
+            
+            onWeatherChanged: {
+                // Switch off loading items and tell the model that new data with revision is available.
+                sqlDataQuery.emitDataChanged(revision);
+             }
+            
+            function requestWeatherData() {
+            	requestMoreDataFromNetwork(region, city);
             }
         }
     ]

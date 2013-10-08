@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 import bb.cascades 1.2
+import utils 1.0
 
 ListView {
     id: weatherList
