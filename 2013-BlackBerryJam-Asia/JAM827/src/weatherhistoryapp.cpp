@@ -16,6 +16,7 @@
 #include "appsettings.h"
 
 #include "common/loadmodeldecorator.h"
+#include "common/pulltorefresh.h"
 #include "common/sqlheaderdataqueryex.h"
 
 #include "data/citydatasource.h"
@@ -31,6 +32,7 @@ WeatherHistoryApp::WeatherHistoryApp()
 	qmlRegisterType<WeatherDataSource>("utils", 1, 0, "WeatherDataSource");
 	qmlRegisterType<CityDataSource>("utils", 1, 0, "CityDataSource");
 	qmlRegisterType<LoadModelDecorator>("utils", 1, 0, "LoadModelDecorator");
+    qmlRegisterType<PullToRefresh>("utils", 1, 0, "PullToRefresh");
 
 
     // Prepare localization.Connect to the LocaleHandlers systemLanguaged change signal, this will

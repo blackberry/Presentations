@@ -47,8 +47,9 @@ public:
      * @param region The region (continent) where the city is located.
      * @param city The name of the city.
      * @param date The date used to determine offset for the request.
+     * @param requestOlderItems If true older items then date is requested otherwise newer items.
      */
-    Q_INVOKABLE void requestMoreDataFromNetwork(const QString region, const QString city, const QString date);
+    Q_INVOKABLE void requestMoreDataFromNetwork(const QString region, const QString city, const QString date, bool requestOlderItems);
 
     /**
      * Returns the current global revision of the database plus one.
@@ -63,6 +64,11 @@ signals:
      * Signal emitted when new weather data has been added to the data base.
      */
     void weatherChanged(int revision);
+
+    /**
+     * Signal emitted when a request for data was made but no date is available.
+     */
+    void noMoreWeather();
 
 private slots:
     /**

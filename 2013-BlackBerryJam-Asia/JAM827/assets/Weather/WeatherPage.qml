@@ -34,7 +34,7 @@ Page {
             dataModel: loadModelDecorator
 
             onDataRequest: {
-                weatherDataSource.requestWeatherData(item);
+                weatherDataSource.requestWeatherData(item, requestOlderItems);
             }
         }
     }
@@ -60,7 +60,7 @@ Page {
                     // If no items by this time make request for loading items.
                     var childCount = weatherModel.childCount(weatherList.rootIndexPath);
                     if (childCount == 0) {
-                        weatherDataSource.requestWeatherData(undefined);
+                        weatherDataSource.requestWeatherData(undefined, true);
                     }
                 }
             }
@@ -75,14 +75,18 @@ Page {
                 // Turn off UI components indicating data loading.
                 resetLoadIndicators();
             }
-
-            function requestWeatherData(item) {
+            
+            onNoMoreWeather: {
+                resetLoadIndicators();
+            }
+            
+            function requestWeatherData(item, requestOlderItems) {
                 if (item == undefined) {
-                    requestMoreDataFromNetwork(region, city, "");
+                    requestMoreDataFromNetwork(region, city, "", true);
                 } else {
-                    requestMoreDataFromNetwork(region, city, item.date);
+                    requestMoreDataFromNetwork(region, city, item.date, requestOlderItems);
                 }
-                loadModelDecorator.loadingOldItems = true;
+                loadModelDecorator.loadingOldItems = requestOlderItems;
             }
         }
     ]
@@ -94,6 +98,7 @@ Page {
     }
     
     function resetLoadIndicators() {
+        weatherList.pullToRefresh.refreshDone();
         loadModelDecorator.loadingOldItems = false;
     }
 

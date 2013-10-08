@@ -5,6 +5,7 @@ device {
     CONFIG(debug, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/appsettings.cpp) \
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.cpp) \
+                 $$quote($$BASEDIR/src/common/pulltorefresh.cpp) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.cpp) \
                  $$quote($$BASEDIR/src/data/citydatasource.cpp) \
                  $$quote($$BASEDIR/src/data/globalconnection.cpp) \
@@ -14,6 +15,7 @@ device {
 
         HEADERS +=  $$quote($$BASEDIR/src/appsettings.h) \
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.h) \
+                 $$quote($$BASEDIR/src/common/pulltorefresh.h) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.h) \
                  $$quote($$BASEDIR/src/data/citydatasource.h) \
                  $$quote($$BASEDIR/src/data/globalconnection.h) \
@@ -24,6 +26,7 @@ device {
     CONFIG(release, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/appsettings.cpp) \
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.cpp) \
+                 $$quote($$BASEDIR/src/common/pulltorefresh.cpp) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.cpp) \
                  $$quote($$BASEDIR/src/data/citydatasource.cpp) \
                  $$quote($$BASEDIR/src/data/globalconnection.cpp) \
@@ -33,6 +36,7 @@ device {
 
         HEADERS +=  $$quote($$BASEDIR/src/appsettings.h) \
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.h) \
+                 $$quote($$BASEDIR/src/common/pulltorefresh.h) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.h) \
                  $$quote($$BASEDIR/src/data/citydatasource.h) \
                  $$quote($$BASEDIR/src/data/globalconnection.h) \
@@ -45,6 +49,7 @@ simulator {
     CONFIG(debug, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/appsettings.cpp) \
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.cpp) \
+                 $$quote($$BASEDIR/src/common/pulltorefresh.cpp) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.cpp) \
                  $$quote($$BASEDIR/src/data/citydatasource.cpp) \
                  $$quote($$BASEDIR/src/data/globalconnection.cpp) \
@@ -54,6 +59,7 @@ simulator {
 
         HEADERS +=  $$quote($$BASEDIR/src/appsettings.h) \
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.h) \
+                 $$quote($$BASEDIR/src/common/pulltorefresh.h) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.h) \
                  $$quote($$BASEDIR/src/data/citydatasource.h) \
                  $$quote($$BASEDIR/src/data/globalconnection.h) \

@@ -17,11 +17,24 @@ import utils 1.0
 
 ListView {
     id: weatherList
-    signal dataRequest(variant item);
+    property alias pullToRefresh: pullToRefresh
+    signal dataRequest(variant item, bool requestOlderItems);
 
     // An XML model can be used for quickly prototyping the list.
     dataModel: XmlDataModel {
         source: "../models/weather.xml"
+    }
+
+    leadingVisual: PullToRefresh {
+        id: pullToRefresh
+        control: weatherList
+
+        onRefreshActiveChanged: {
+            if (active) {
+                var item = weatherList.dataModel.data([ 0 ]);
+                dataRequest(item, false);
+            }
+        }
     }
 
     listItemComponents: [
@@ -48,7 +61,7 @@ ListView {
                     var childCount = weatherList.dataModel.childCount(weatherList.rootIndexPath);
                     if (childCount > 0) {
                         var item = weatherList.dataModel.data([ childCount - 2 ]);
-                        dataRequest(item);
+                        dataRequest(item, true);
                     }
                 }
             }

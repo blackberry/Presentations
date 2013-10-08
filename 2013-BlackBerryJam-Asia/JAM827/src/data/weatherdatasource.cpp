@@ -133,15 +133,14 @@ void WeatherDataSource::onSqlConnectorReply(const bb::data::DataAccessReply& rep
 }
 
 void WeatherDataSource::requestMoreDataFromNetwork(const QString region, const QString city,
-    const QString date)
+        const QString date, bool requestOlderItems)
 {
     // Only request data if there is currently no request being done.
     if (mReply == 0) {
         int dayOffset = 0;
         QString encodedCity = QUrl(city).toEncoded();
         QString encodedRegion = QUrl(region).toEncoded();
-        QUrl path = AppSettings::prepareServerUrl(
-                "resources/cities/" + encodedRegion + "/" + encodedCity, true);
+        QUrl path = AppSettings::prepareServerUrl("resources/cities/" + encodedRegion + "/" + encodedCity, true);
 
         // An empty date string mean request data with 0 days offset.
         if (!date.isEmpty()) {
@@ -150,8 +149,29 @@ void WeatherDataSource::requestMoreDataFromNetwork(const QString region, const Q
             QDate compareDate = QDate::fromString(date, "yyyy-MM-dd");
             dayOffset = compareDate.daysTo(today);
 
-            // Add one to day offset to begin at the next date after the "date" parameter.
-            dayOffset += 1;
+            if (requestOlderItems) {
+                // Add one to day offset to begin at the next date after the "date" parameter.
+                dayOffset += 1;
+            } else {
+                // For newer items than date we need to know how many items are set to be requested each time.
+                uint chunkSize = AppSettings::loadSize();
+                dayOffset -= chunkSize;
+
+                if (dayOffset <= 0) {
+                    // A negative offset means future data, which is not possible, we have to
+                    // adjust the chunksize and set the dayOffset to 0 i.e. today.
+                    chunkSize = chunkSize + dayOffset;
+                    dayOffset = 0;
+
+                    if (chunkSize == 0) {
+                        // If the adjusted chunk size become 0, all data up to current date has been received and we are done.
+                        emit noMoreWeather();
+                        return;
+                    }
+                    // Request a new path with the custom chunksize.
+                    path = AppSettings::prepareServerUrl("resources/cities/" + encodedRegion + "/" + encodedCity, true, chunkSize);
+                }
+            }
         }
 
         // Add the offset for the server request, corresponds to from which day in the pas the request is made.

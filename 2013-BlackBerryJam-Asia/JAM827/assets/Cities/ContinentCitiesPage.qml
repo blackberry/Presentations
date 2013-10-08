@@ -41,7 +41,7 @@ Page {
                 // Set the city with id as favorite.
                 cityDataSource.setFavorite(id, true);            
             }
-                        
+
             onTriggered: {
                 if( indexPath.length > 1 ) {
                     // When a non header item is selected, we push the Weather page for the city.
