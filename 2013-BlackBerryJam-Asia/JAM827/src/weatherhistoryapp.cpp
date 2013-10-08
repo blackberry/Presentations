@@ -14,6 +14,7 @@
  */
 #include "weatherhistoryapp.h"
 #include "appsettings.h"
+#include "data/globalconnection.h"
 
 #include <bb/cascades/LocaleHandler>
 #include <bb/cascades/TabbedPane>
@@ -33,6 +34,9 @@ WeatherHistoryApp::WeatherHistoryApp()
 
     // The application settings object that stores application wide persistent data.
     mAppSettings = new AppSettings(this);
+
+    // Initiate the sql connection to set up the data base in the app data folder.
+    GlobalConnection::instance()->sqlConnection();
 
     mQmlDocument->setContextProperty("_app", this);
     mQmlDocument->setContextProperty("_appSettings", mAppSettings);

@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 import bb.cascades 1.2
+import bb.cascades.datamanager 1.2
 
 // The Weather page; where weather data is presented in a list with custom items.
 Page {
@@ -29,9 +30,33 @@ Page {
     Container {
         WeatherList {
             id: weatherList
+            dataModel: weatherModel
         }
     }
 
+    attachedObjects: [
+        SimpleQueryDataModel {
+            id: weatherModel
+
+            query: SqlDataQuery {
+                id: sqlDataQuery
+                source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db"
+                query: "SELECT * FROM weather WHERE city=:city AND region=:region ORDER by date DESC";
+                countQuery: "SELECT count(*) from weather WHERE city=:city AND region=:region"
+
+                bindValues: {
+                    "weather": "weather",
+                    "city": city,
+                    "region": region
+                }
+            }
+        }
+    ]
+
+    onCreationCompleted: {
+        weatherModel.load();
+    }
+    
     function resetToTop() {
         weatherList.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
     }

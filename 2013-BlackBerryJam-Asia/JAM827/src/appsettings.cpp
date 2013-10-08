@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 #include "appsettings.h"
+#include "globalconnection.h"
 
 #include <QCoreApplication>
 #include <QSettings>
