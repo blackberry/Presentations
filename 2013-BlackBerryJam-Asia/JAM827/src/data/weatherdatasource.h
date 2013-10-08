@@ -17,6 +17,7 @@
 
 #include <bb/data/JsonDataAccess>
 #include <bb/data/SqlConnection>
+#include <QtNetwork/QNetworkReply>
 
 using namespace bb::data;
 
@@ -64,6 +65,20 @@ signals:
     void weatherChanged(int revision);
 
 private slots:
+    /**
+     * This Slot function is called when the network request to the
+     * "weather service" is complete.
+     */
+    void onHttpFinished();
+
+    /**
+     * This Slot function is connected to the mAccessManager sslErrors signal. This function
+     * allows us to see what errors we get when connecting to the address given by server url.
+     *
+     * @param reply The network reply
+     * @param errors SSL Error List
+     */
+    void onSslErrors(QNetworkReply * reply, const QList<QSslError> & errors);
 
     /**
      * Function used to connect to the SqlConnectors reply signal, this is
@@ -81,6 +96,10 @@ private:
      * @param weatherData The QVariantList with weather data that is to be added to the database.
      */
     void loadNetworkReplyDataIntoDataBase(QVariantList weatherData);
+
+    // The network parameters; used for accessing a file from the Internet
+    QNetworkAccessManager mAccessManager;
+    QNetworkReply *mReply;
 
     // Data base connector.
     SqlConnection *mSqlConnector;
