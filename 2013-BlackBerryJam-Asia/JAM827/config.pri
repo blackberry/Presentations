@@ -7,6 +7,7 @@ device {
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.cpp) \
                  $$quote($$BASEDIR/src/common/pulltorefresh.cpp) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.cpp) \
+                 $$quote($$BASEDIR/src/common/weathererror.cpp) \
                  $$quote($$BASEDIR/src/data/citydatasource.cpp) \
                  $$quote($$BASEDIR/src/data/globalconnection.cpp) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.cpp) \
@@ -17,6 +18,7 @@ device {
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.h) \
                  $$quote($$BASEDIR/src/common/pulltorefresh.h) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.h) \
+                 $$quote($$BASEDIR/src/common/weathererror.h) \
                  $$quote($$BASEDIR/src/data/citydatasource.h) \
                  $$quote($$BASEDIR/src/data/globalconnection.h) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.h) \
@@ -28,6 +30,7 @@ device {
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.cpp) \
                  $$quote($$BASEDIR/src/common/pulltorefresh.cpp) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.cpp) \
+                 $$quote($$BASEDIR/src/common/weathererror.cpp) \
                  $$quote($$BASEDIR/src/data/citydatasource.cpp) \
                  $$quote($$BASEDIR/src/data/globalconnection.cpp) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.cpp) \
@@ -38,6 +41,7 @@ device {
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.h) \
                  $$quote($$BASEDIR/src/common/pulltorefresh.h) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.h) \
+                 $$quote($$BASEDIR/src/common/weathererror.h) \
                  $$quote($$BASEDIR/src/data/citydatasource.h) \
                  $$quote($$BASEDIR/src/data/globalconnection.h) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.h) \
@@ -51,6 +55,7 @@ simulator {
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.cpp) \
                  $$quote($$BASEDIR/src/common/pulltorefresh.cpp) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.cpp) \
+                 $$quote($$BASEDIR/src/common/weathererror.cpp) \
                  $$quote($$BASEDIR/src/data/citydatasource.cpp) \
                  $$quote($$BASEDIR/src/data/globalconnection.cpp) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.cpp) \
@@ -61,6 +66,7 @@ simulator {
                  $$quote($$BASEDIR/src/common/loadmodeldecorator.h) \
                  $$quote($$BASEDIR/src/common/pulltorefresh.h) \
                  $$quote($$BASEDIR/src/common/sqlheaderdataqueryex.h) \
+                 $$quote($$BASEDIR/src/common/weathererror.h) \
                  $$quote($$BASEDIR/src/data/citydatasource.h) \
                  $$quote($$BASEDIR/src/data/globalconnection.h) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.h) \

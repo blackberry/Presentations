@@ -14,7 +14,9 @@
  */
 import bb.cascades 1.2
 import bb.cascades.datamanager 1.2
+import bb.system 1.2
 import utils 1.0
+import "../messages/"
 
 // The Weather page; where weather data is presented in a list with custom items.
 Page {
@@ -37,6 +39,13 @@ Page {
                 weatherDataSource.requestWeatherData(item, requestOlderItems);
             }
         }
+        
+        ControlDelegate {
+            id: errorDelegate
+            source: "asset:///messages/Message.qml"
+            horizontalAlignment: HorizontalAlignment.Fill
+            delegateActive: false
+        }
     }
 
     attachedObjects: [
@@ -54,6 +63,14 @@ Page {
                     // Make sure there is revision_id in the query, otherwise listview will not update smoothly
                     revisionColumn: "revision_id"
                     revisionQuery: "SELECT revision_id FROM revision WHERE table_name=:weather"
+
+                    onDataChanged: {
+                        console.log("data changed in SqlDataQuery");
+                    }
+
+                    onError: {
+                        console.log("query error: " + code + ", " + message);
+                    }
                 }
 
                 onLoaded: {
@@ -80,6 +97,29 @@ Page {
                 resetLoadIndicators();
             }
             
+            onErrorCodeChanged: {
+                
+                if (loadModelDecorator.loadingOldItems && errorCode != WeatherError.NoError && errorCode != undefined) {
+                    if (errorCode == WeatherError.ServerError || errorCode == WeatherError.ServerBusy || errorCode == WeatherError.JsonError ) {
+                        // Just show the user a hud to reload.
+                        errorToast.body = qsTr("Oh ooh, an error occured. Please try again.");
+                        errorToast.show();
+                        
+                        // Only do this if at end of the list.
+                        loadModelDecorator.temporaryHideDecorator();          
+                    } else if (errorCode == WeatherError.InvalidCity) {
+                        // This is error is non-recoverable there is no data for the city. 
+                        errorDelegate.delegateActive = true;
+                        errorDelegate.control.message = qsTr("You seem lost, the city you are looking for is not there, check the map again.");
+                    }
+                    
+                    resetLoadIndicators();
+                } else {
+                    // Never show the delegate if no error has occured.
+                    errorDelegate.delegateActive = false;
+                }
+            }
+            
             function requestWeatherData(item, requestOlderItems) {
                 if (item == undefined) {
                     requestMoreDataFromNetwork(region, city, "", true);
@@ -88,18 +128,45 @@ Page {
                 }
                 loadModelDecorator.loadingOldItems = requestOlderItems;
             }
+        },
+        SystemToast {
+            id: errorToast
         }
     ]
 
     onCreationCompleted: {
         if (homeWeather && city != "" && region != "") {
-            setLocation(region, city);
+            initHomeWeather();
         }
     }
     
     function resetLoadIndicators() {
         weatherList.pullToRefresh.refreshDone();
         loadModelDecorator.loadingOldItems = false;
+    }
+
+    function initHomeWeather() {
+        // The properties of a SqlDataQuery can only be set once, so we do it once we have the city and region.
+        // The weather page is showing the home location the data depends on which city is set in the settings table.
+        sqlDataQuery.bindValues = {
+            "weather": "weather"
+        }
+
+        sqlDataQuery.query = "SELECT * FROM weather INNER JOIN settings ON weather.city=settings.city AND weather.region=settings.region ORDER by date DESC";
+        sqlDataQuery.countQuery = "SELECT count(*) from weather INNER JOIN settings ON weather.city=settings.city AND weather.region=settings.region";
+
+        // Connect to home city changed signal, in order to reload data if the home location changes.
+        _appSettings.homeChanged.connect(onNewHome); //change function.
+        weatherModel.load();
+    }
+
+    function onNewHome(home) {
+        // The weatherpage is showing the home location weather and the user has selected a new home town, 
+        region = home.region;
+        city = home.city;
+        
+        // To trigger a reload of the data with the new hometown update the overall revision.
+        sqlDataQuery.emitDataChanged(weatherDataSource.incrementRevision());
     }
 
     function setLocation(weatherRegion, weatherCity) {

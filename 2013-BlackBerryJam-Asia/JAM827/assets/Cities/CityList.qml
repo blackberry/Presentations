@@ -22,6 +22,7 @@ ListView {
     // The city list can emit two signals: one for removing a city from the list and
     // another for updating the home city.
     signal changeFavoriteCity(variant id);
+    signal updateHomeCity(string region, string city);
         
     listItemComponents: [
         ListItemComponent {
@@ -52,6 +53,16 @@ ListView {
                             
                             onTriggered: {
                                 cityItem.ListItem.view.changeFavoriteCity(ListItemData.citiesid);
+                            }
+                        }
+                        
+                        ActionItem {
+                            title: qsTr("Home city") + Retranslate.onLanguageChanged
+                            imageSource: "asset:///images/menuicons/icon_home.png"
+                            
+                            onTriggered: {
+                                // Emit signal that will make the current city the home city.
+                                cityItem.ListItem.view.updateHomeCity(ListItemData.region, ListItemData.city);
                             }
                         }
                     }

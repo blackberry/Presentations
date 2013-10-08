@@ -41,7 +41,13 @@ Page {
                 // Set the city with id as favorite.
                 cityDataSource.setFavorite(id, true);            
             }
-
+            
+            onUpdateHomeCity: {
+                // Update the home city property of the settings object.
+                var newHome = {"region":region, "city":city}
+                _appSettings.home = newHome;
+            }
+            
             onTriggered: {
                 if( indexPath.length > 1 ) {
                     // When a non header item is selected, we push the Weather page for the city.

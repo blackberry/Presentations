@@ -18,6 +18,7 @@
 #include "common/loadmodeldecorator.h"
 #include "common/pulltorefresh.h"
 #include "common/sqlheaderdataqueryex.h"
+#include "common/weathererror.h"
 
 #include "data/citydatasource.h"
 #include "data/weatherdatasource.h"
@@ -29,6 +30,7 @@
 WeatherHistoryApp::WeatherHistoryApp()
 {
 	qmlRegisterType<SqlHeaderDataQueryEx>("bb.cascades.datamanager", 1, 2, "SqlHeaderDataQueryEx");
+	qmlRegisterUncreatableType<WeatherError>("utils", 1, 0, "WeatherError", "Uncreatable type");
 	qmlRegisterType<WeatherDataSource>("utils", 1, 0, "WeatherDataSource");
 	qmlRegisterType<CityDataSource>("utils", 1, 0, "CityDataSource");
 	qmlRegisterType<LoadModelDecorator>("utils", 1, 0, "LoadModelDecorator");
@@ -81,5 +83,5 @@ void WeatherHistoryApp::onSystemLanguageChanged()
 }
 
 QString WeatherHistoryApp::getHomeDirectory() {
-    return QDir::homePath();
+    return QDir::homePath(); // TODO: Make this a read property instead.
 }

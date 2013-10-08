@@ -22,7 +22,7 @@
 #include <QDate>
 
 WeatherDataSource::WeatherDataSource(QObject *parent) :
-        QObject(parent), mReply(0), mRevision(0)
+        QObject(parent), mReply(0), mRevision(0), mErrorCode(WeatherError::NoError)
 {
     // Connect to the sslErrors signal to the onSslErrors() function. This will help us see what errors
     // we get when connecting to the address given by server url.
@@ -92,21 +92,59 @@ void WeatherDataSource::onHttpFinished()
 {
     JsonDataAccess jda;
     QVariantList weatherDataFromServer;
+    int httpStatus = -1; // controls the final behavior of this function
 
     if (mReply->error() == QNetworkReply::NoError) {
-        // Load the data.
+        // Load the data using the reply QIODevice.
         weatherDataFromServer = jda.load(mReply).value<QVariantList>();
-        loadNetworkReplyDataIntoDataBase(weatherDataFromServer);
+
+        if (jda.hasError()) {
+            bb::data::DataAccessError error = jda.error();
+            qDebug() << "JSON loading error:" << error.errorType() << " : " << error.errorMessage();
+            httpStatus = -2;
+        } else {
+            httpStatus = 200;
+        }
     } else {
         // An error occurred, try to get the http status code and reason
         QVariant statusCode = mReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
         QString reason = mReply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
 
+        if (statusCode.isValid()) {
+            httpStatus = statusCode.toInt();
+        }
+
         qDebug() << "Network request to " << mReply->request().url().toString()
-                << " failed with http status " << " " << reason;
+                << " failed with http status " << httpStatus << " " << reason;
     }
 
-    // Handle error and send notification.
+    // Now behave
+    switch (httpStatus) {
+        case 200:
+            loadNetworkReplyDataIntoDataBase(weatherDataFromServer);
+            break;
+        case 404:
+            if (mCursor.index == 0) {
+                // If we requested index 0 and didn't get an empty array it means the city does not exist and we should show an error
+                setErrorCode(WeatherError::InvalidCity);
+            } else {
+                // If we get a 404 in the middle of a data set it simply means there is no more data
+                emit noMoreWeather();
+            }
+            break;
+        case 503:
+            // TODO: perhaps try again a few times and eventually just stop? if we end up stopping and the list is empty, show an alert message. if the list isn't empty just stop fetching
+            setErrorCode(WeatherError::ServerBusy);
+            break;
+        case -2:
+            setErrorCode(WeatherError::JsonError);
+            break;
+        case 500:
+        default:
+            // The server crapped out, if we don't have any entries let the user know an error occurred, otherwise just stop fetching
+            setErrorCode(WeatherError::ServerError);
+            break;
+    }
 
     // The reply is not needed now so we call deleteLater() function since we are in a slot.
     mReply->deleteLater();
@@ -130,6 +168,17 @@ void WeatherDataSource::onSqlConnectorReply(const bb::data::DataAccessReply& rep
             emit weatherChanged(mRevision);
         }
     }
+}
+
+WeatherError::Type WeatherDataSource::errorCode()
+{
+    return mErrorCode;
+}
+
+void WeatherDataSource::setErrorCode(WeatherError::Type error)
+{
+    mErrorCode = error;
+    emit errorCodeChanged(mErrorCode);
 }
 
 void WeatherDataSource::requestMoreDataFromNetwork(const QString region, const QString city,
@@ -176,6 +225,9 @@ void WeatherDataSource::requestMoreDataFromNetwork(const QString region, const Q
 
         // Add the offset for the server request, corresponds to from which day in the pas the request is made.
         path.addQueryItem("start", QString("%1").arg(dayOffset));
+
+        // Reset the error code.
+        setErrorCode(WeatherError::NoError);
 
         qDebug() << "GET " << path.toString();
         mReply = mAccessManager.get(QNetworkRequest(path));

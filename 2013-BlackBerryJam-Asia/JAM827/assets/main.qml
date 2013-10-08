@@ -42,8 +42,8 @@ TabbedPane {
             WeatherPage {
                 id: homeCityPage
                 
-                city: "Hong Kong"
-                region: "Asia"
+                city: _appSettings.home.city
+                region: _appSettings.home.region
                 homeWeather: true;
             }
         }

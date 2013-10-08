@@ -38,6 +38,12 @@ NavigationPane {
                     favoriteDataSource.setFavorite(id, false);
                 }
                 
+                onUpdateHomeCity: {
+                    // Update the home city property of the settings object.
+                    var newHome = {"region":region, "city":city}
+                    _appSettings.home = newHome;
+                }
+                
                 onTriggered: {
                     var chosenItem = dataModel.data(indexPath);
                     

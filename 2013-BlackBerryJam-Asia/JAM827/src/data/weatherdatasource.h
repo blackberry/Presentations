@@ -15,11 +15,14 @@
 #ifndef _WEATHERDATASOURCE_H_
 #define _WEATHERDATASOURCE_H_
 
+#include "weathererror.h"
 #include <bb/data/JsonDataAccess>
 #include <bb/data/SqlConnection>
 #include <QtNetwork/QNetworkReply>
 
 using namespace bb::data;
+
+class WeatherError;
 
 /* WeatherModel Description:
  *
@@ -32,6 +35,11 @@ class WeatherDataSource: public QObject
 {
     Q_OBJECT
 
+    /**
+     * The last reported error code.
+     */
+    Q_PROPERTY(WeatherError::Type errorCode READ errorCode NOTIFY errorCodeChanged)
+
 public:
     /**
      * This is our constructor. This class inherits from GroupDataModel. The parent object is set,
@@ -40,6 +48,11 @@ public:
      * @param parent The parent object, if not set, @c 0 is used
      */
     WeatherDataSource(QObject *parent = 0);
+
+    /**
+     * The last error code reported when retrieving data.
+     */
+    WeatherError::Type errorCode();
 
     /**
      * Call this function to request weather data for a specific location.
@@ -59,6 +72,11 @@ public:
     Q_INVOKABLE int incrementRevision();
 
 signals:
+
+    /**
+     * Signal emitted when the network error status changes.
+     */
+    void errorCodeChanged(WeatherError::Type newError);
 
     /**
      * Signal emitted when new weather data has been added to the data base.
@@ -97,11 +115,18 @@ private slots:
 
 private:
     /**
-     * This Helper function used to store the data received from the network.
+     * This Helper function used to store the data recieved from the network.
      *
      * @param weatherData The QVariantList with weather data that is to be added to the database.
      */
     void loadNetworkReplyDataIntoDataBase(QVariantList weatherData);
+
+    /**
+     * Sets the error code and emits a signal that the error code has changed
+     *
+     * @parameter error the new error
+     */
+    void setErrorCode(WeatherError::Type error);
 
     // The network parameters; used for accessing a file from the Internet
     QNetworkAccessManager mAccessManager;
@@ -112,6 +137,9 @@ private:
 
     // The last accessed data revision.
     int mRevision;
+
+    // The last reported error code.
+    WeatherError::Type mErrorCode;
 
     struct DataCursor {
     	DataCursor() : index(0){ }
