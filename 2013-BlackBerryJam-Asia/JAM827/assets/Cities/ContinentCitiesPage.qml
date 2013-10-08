@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 import bb.cascades 1.2
+import bb.cascades.datamanager 1.2
 
 // A page used to present a list of cities for a specific continent.
 // The real data is managed in code and read from an SQL database.
@@ -46,9 +47,28 @@ Page {
     }
         
     attachedObjects: [
+        AsyncHeaderDataModel {
+            id: cityModel
+            
+            query: SqlHeaderDataQuery {
+                id: cityQuery
+                source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db";
+                query: "SELECT * FROM cities ORDER by city";
+                countQuery: "SELECT count(*) FROM cities";
+                headerQuery: "SELECT substr(city, 1, 1) AS header, count(*) FROM cities GROUP BY header";
+
+                onError: {
+                    console.log("query error: " + code + ", " + message);
+                }
+            }
+        },
         ComponentDefinition {
             id: weatherPageDefinition
             source: "asset:///Weather/WeatherPage.qml"
         }
     ]
+    
+    onCreationCompleted: {
+        cityModel.load();
+    }
 }

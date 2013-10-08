@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 import bb.cascades 1.2
+import bb.cascades.datamanager 1.2
 import "Cities"
 
 // This is a Page where a list of favorite cities are shown. A NavigationPane
@@ -42,12 +43,28 @@ NavigationPane {
             }
         }
     }
-        
+    
+    onCreationCompleted: {
+        favModel.load();
+    }
+    
     onPopTransitionEnded: {
         page.destroy();
     }
     
     attachedObjects: [
+        AsyncHeaderDataModel {
+            id: favModel
+            cacheSize: 50
+            
+            query: SqlHeaderDataQuery {
+                id: favQuery
+                source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db";
+                query: "SELECT * FROM cities WHERE favorite='true' ORDER BY city"
+                countQuery: "SELECT count(*) FROM cities WHERE favorite='true'"
+                headerQuery: "SELECT substr(city, 1, 1) AS header, count(*) FROM cities WHERE favorite='true' GROUP BY header"
+            }
+        },
         ComponentDefinition {
             id: weatherPageDefinition
             source: "Weather/WeatherPage.qml"
