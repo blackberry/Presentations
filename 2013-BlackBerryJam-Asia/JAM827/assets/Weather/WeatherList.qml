@@ -14,25 +14,23 @@
  */
 import bb.cascades 1.2
 
-// The Weather page; where weather data is presented in a list with custom items.
-Page {
-    id: weather
-    property string city: "Hong Kong"
-    property string region
-    property bool homeWeather: false
+ListView {
+    id: weatherList
 
-    titleBar: TitleBar {
-        id: titleBar
-        title: city
+    // An XML model can be used for quickly prototyping the list.
+    dataModel: XmlDataModel {
+        source: "../models/weather.xml"
     }
 
-    Container {
-        WeatherList {
-            id: weatherList
+    listItemComponents: [
+        ListItemComponent {
+            type: "item"
+            WeatherItem {
+            }
         }
-    }
-
-    function resetToTop() {
-        weatherList.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
+    ]
+    
+    function itemType(data, indexPath) {
+        return "item";
     }
 }

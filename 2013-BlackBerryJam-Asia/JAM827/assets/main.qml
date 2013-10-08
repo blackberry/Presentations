@@ -47,6 +47,14 @@ TabbedPane {
                 homeWeather: true;
             }
         }
+        
+        onTriggered: {            
+            // Check if the delegates object is defined, if so trigger a function to reset
+            // the list in the weather page (the object) to the top position.
+            if(weatherPageDelegate.object != undefined) {
+                weatherPageDelegate.object.resetToTop();   
+            }
+        }        
     }
     
     // The city browse page where filtering is done based on continents.

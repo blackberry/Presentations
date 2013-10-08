@@ -1,0 +1,11 @@
+<root>
+    <item icon="3" templo="4" temphi="14" tempaverage="11" date="2013-01-21"/>
+    <item icon="1" templo="7" temphi="11" tempaverage="15" date="2013-01-20"/>
+    <item icon="2" templo="5" temphi="11" tempaverage="13" date="2013-01-19"/>
+    <item icon="1" templo="10" temphi="15" tempaverage="13" date="2013-01-18"/>
+    <item icon="0" templo="11" temphi="11" tempaverage="13" date="2013-01-17"/>
+    <item icon="5" templo="15" temphi="20" tempaverage="13" date="2013-01-16"/>
+    <item icon="4" templo="2" temphi="17" tempaverage="13" date="2013-01-15"/>
+    <item icon="3" templo="5" temphi="16" tempaverage="13" date="2013-01-14"/>
+    <last_item />
+</root>
