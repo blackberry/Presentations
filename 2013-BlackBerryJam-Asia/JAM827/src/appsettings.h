@@ -30,6 +30,11 @@ class AppSettings: public QObject
 Q_OBJECT
 
     /**
+     * The currently selected home location. A QVariantMap with "city" and "region" as keywords.
+     */
+    Q_PROPERTY(QVariantMap home READ home WRITE setHome NOTIFY homeChanged FINAL)
+
+    /**
      * The weather server url to grab data from.
      */
     Q_PROPERTY(QUrl serverUrl READ serverUrl WRITE setServerUrl NOTIFY serverUrlChanged FINAL)
@@ -56,6 +61,8 @@ public:
     /*
      * Accessor functions for properties.
      */
+    QVariantMap home();
+    Q_SLOT void setHome(QVariantMap home);
 
     QUrl serverUrl();
     void setServerUrl(QUrl url);
@@ -83,6 +90,9 @@ signals:
     void loadSizeChanged(uint size);
     void maxSizeChanged(uint size);
     void hackThresholdChanged(uint threshold);
+    void homeCityChanged(QString city);
+    void homeRegionChanged(QString region);
+    void homeChanged(QVariantMap home);
 
 private:
     /**
@@ -94,6 +104,22 @@ private:
     static const uint mDefaultMaxSize;
     static const uint mDefaultHackThreshold;
 
+    /**
+     * Default values for main page data
+     */
+    static const QString mDefaultHomeRegion;
+    static const QString mDefaultHomeCity;
+
+    /**
+     * The memberVariable for the home location.
+     */
+    QVariantMap mHomeMap;
+
+    /**
+     * Data base connector
+     */
+    bb::data::SqlConnection *mSqlConnector;
+
 public:
     /**
      * The keys where the properties are stored in the QSettings object.
@@ -103,6 +129,12 @@ public:
     static const QString LOAD_SIZE_SETTINGS_KEY;
     static const QString MAX_SIZE_SETTINGS_KEY;
     static const QString HACK_THRESHOLD_SETTINGS_KEY;
+
+    /**
+     * The keys where the main page city values are stored
+     */
+    static const QString HOME_REGION_KEY;
+    static const QString HOME_CITY_KEY;
 
     /**
      * Utility function to prepare the server url, it sets up a complete

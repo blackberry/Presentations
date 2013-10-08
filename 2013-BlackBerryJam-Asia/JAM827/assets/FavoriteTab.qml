@@ -14,6 +14,7 @@
  */
 import bb.cascades 1.2
 import bb.cascades.datamanager 1.2
+import utils 1.0
 import "Cities"
 
 // This is a Page where a list of favorite cities are shown. A NavigationPane
@@ -32,6 +33,10 @@ NavigationPane {
         Container {
             CityList {
                 dataModel: favModel
+                
+                onChangeFavoriteCity: {
+                    favoriteDataSource.setFavorite(id, false);
+                }
                 
                 onTriggered: {
                     var chosenItem = dataModel.data(indexPath);
@@ -58,12 +63,27 @@ NavigationPane {
             id: favModel
             cacheSize: 50
             
-            query: SqlHeaderDataQuery {
+            query: SqlHeaderDataQueryEx {
                 id: favQuery
                 source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db";
                 query: "SELECT * FROM cities WHERE favorite='true' ORDER BY city"
+                keyColumn: "citiesid"
                 countQuery: "SELECT count(*) FROM cities WHERE favorite='true'"
                 headerQuery: "SELECT substr(city, 1, 1) AS header, count(*) FROM cities WHERE favorite='true' GROUP BY header"
+                revisionColumn: "revision_id"
+                revisionQuery: "SELECT revision_id FROM revision WHERE table_name='cities'"
+                
+                onError: {
+                    console.log("query error: " + code + ", " + message);
+                }
+            }
+        },
+        CityDataSource {
+            id: favoriteDataSource
+            
+            onCitiesChanged: {
+                // The entries in the data base have changed update revision to reload.
+                favQuery.emitDataChanged(revision);
             }
         },
         ComponentDefinition {

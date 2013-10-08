@@ -16,7 +16,13 @@ import bb.cascades 1.2
 
 ListView {
     id: cityList
-           
+    
+    property bool actAsFavoriteList: true;
+    
+    // The city list can emit two signals: one for removing a city from the list and
+    // another for updating the home city.
+    signal changeFavoriteCity(variant id);
+        
     listItemComponents: [
         ListItemComponent {
             type: "header"
@@ -30,6 +36,26 @@ ListView {
             StandardListItem {
                 id: cityItem
                 title: ListItemData.city
+                
+                // Item context actions are items long-pressed on the menu so
+                // actions will be shown.
+                contextActions: [
+                    ActionSet {
+                        title: ListItemData.city
+                        subtitle: qsTr("City actions") + Retranslate.onLanguageChanged
+                        
+                        ActionItem {
+                            property bool actAsFavoriteList: cityItem.ListItem.view.actAsFavoriteList 
+                            title: (actAsFavoriteList) ? qsTr("Remove from favorites") + Retranslate.onLanguageChanged :qsTr("Add to favorites") + Retranslate.onLanguageChanged
+                            imageSource: "asset:///images/menuicons/icon_favorites.png"
+                            enabled: (actAsFavoriteList) ? true : !ListItemData.favorite
+                            
+                            onTriggered: {
+                                cityItem.ListItem.view.changeFavoriteCity(ListItemData.citiesid);
+                            }
+                        }
+                    }
+                ]
             }
         }
     ]

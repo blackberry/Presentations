@@ -25,15 +25,23 @@ const bool AppSettings::mDefaultSimulateProblems(false);
 const uint AppSettings::mDefaultLoadSize(10);
 const uint AppSettings::mDefaultMaxSize(1024);
 const uint AppSettings::mDefaultHackThreshold(10);
+const QString AppSettings::mDefaultHomeRegion("Europe");
+const QString AppSettings::mDefaultHomeCity("London");
 const QString AppSettings::SERVER_URL_SETTINGS_KEY("serverUrl");
 const QString AppSettings::SIMULATE_PROBLEMS_SETTINGS_KEY("simulateProblems");
 const QString AppSettings::LOAD_SIZE_SETTINGS_KEY("loadSize");
 const QString AppSettings::MAX_SIZE_SETTINGS_KEY("maxSize");
 const QString AppSettings::HACK_THRESHOLD_SETTINGS_KEY("hackThreshold");
+const QString AppSettings::HOME_REGION_KEY("homeRegion");
+const QString AppSettings::HOME_CITY_KEY("homeCity");
 
 AppSettings::AppSettings(QObject* parent) : QObject(parent)
 
 {
+    // Set up sql connection for accessing settings database, used for storing home in order to use
+    // it for joining with weather data table
+    mSqlConnector = GlobalConnection::instance()->sqlConnection();
+
     // Set up the application organization and name (used by QSettings
     // when saving values to the persistent store).
     QCoreApplication::setOrganizationName("Example");
@@ -57,10 +65,48 @@ AppSettings::AppSettings(QObject* parent) : QObject(parent)
     if (settings.value(MAX_SIZE_SETTINGS_KEY).isNull()) {
         setMaxSize(mDefaultMaxSize);
     }
+
+    // Get the home location from the database.
+    QVariantList dataList;
+    dataList << "home";
+    bb::data::DataAccessReply reply =  mSqlConnector->executeAndWait ("SELECT * FROM settings WHERE key=:home", dataList);
+
+    if(!reply.hasError()) {
+        QVariantList resultList = reply.result().toList();
+        QVariantMap resultMap = resultList.at(0).toMap();
+        mHomeMap = resultMap;
+    } else {
+        qWarning() << "AppSettings: Home location could not be read from database, setting default.";
+        mHomeMap["region"] = mDefaultHomeRegion;
+        mHomeMap["city"] = mDefaultHomeCity;
+    }
 }
 
 AppSettings::~AppSettings()
 {
+}
+
+QVariantMap AppSettings::home()
+{
+    return mHomeMap;
+}
+
+void AppSettings::setHome(QVariantMap home)
+{
+    if (home != mHomeMap) {
+        // Store the home location in the data base in order to join it with weather data.
+        QVariantList dataList;
+        dataList << home["region"] << home["city"] << "home";
+        QString query = "UPDATE settings SET region=:region, city=:city WHERE key=:home";
+        bb::data::DataAccessReply reply =  mSqlConnector->executeAndWait (query, dataList);
+
+        if(!reply.hasError()) {
+            qWarning() << "AppSettings: Home location could not be read from database.";
+        }
+
+        mHomeMap = home;
+        emit homeChanged(mHomeMap);
+    }
 }
 
 QUrl AppSettings::serverUrl()

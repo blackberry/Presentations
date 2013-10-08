@@ -75,7 +75,7 @@ Page {
                 // Turn off UI components indicating data loading.
                 resetLoadIndicators();
             }
-            
+
             function requestWeatherData(item) {
                 if (item == undefined) {
                     requestMoreDataFromNetwork(region, city, "");

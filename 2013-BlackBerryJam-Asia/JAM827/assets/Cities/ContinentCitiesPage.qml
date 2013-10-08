@@ -14,6 +14,7 @@
  */
 import bb.cascades 1.2
 import bb.cascades.datamanager 1.2
+import utils 1.0
 
 // A page used to present a list of cities for a specific continent.
 // The real data is managed in code and read from an SQL database.
@@ -33,8 +34,14 @@ Page {
         
         CityList {
             id: cityList
+            actAsFavoriteList: false
             dataModel: cityModel
             
+            onChangeFavoriteCity: {
+                // Set the city with id as favorite.
+                cityDataSource.setFavorite(id, true);            
+            }
+                        
             onTriggered: {
                 if( indexPath.length > 1 ) {
                     // When a non header item is selected, we push the Weather page for the city.
@@ -51,13 +58,34 @@ Page {
         AsyncHeaderDataModel {
             id: cityModel
             
-            query: SqlHeaderDataQuery {
+            query: SqlHeaderDataQueryEx {
                 id: cityQuery
                 source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db";
 
+                keyColumn: "citiesid"
+                revisionColumn: "revision_id"
+                revisionQuery: "SELECT revision_id FROM revision WHERE table_name='cities'"
                 onError: {
                     console.log("query error: " + code + ", " + message);
                 }
+            }
+            
+            onLoaded: {
+                var childCount = cityModel.childCount(cityList.rootIndexPath);
+                if (childCount == 0 || continent == "All cities") {
+                    // If no items by this time make a request to fetch items.
+                    // The "All cities" is a special case here, we always request items for that, 
+                    // since we have no way of knowing if all cities actually have been delivered.
+                    cityDataSource.requestMoreDataFromNetwork(continent);
+                }
+            }
+        },
+        CityDataSource {
+            id: cityDataSource
+            
+            onCitiesChanged: {
+                // The entries in the data base have changed update revision to reload.
+                cityQuery.emitDataChanged(revision);
             }
         },
         ComponentDefinition {

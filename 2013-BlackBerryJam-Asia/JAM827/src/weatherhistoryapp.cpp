@@ -16,6 +16,9 @@
 #include "appsettings.h"
 
 #include "common/loadmodeldecorator.h"
+#include "common/sqlheaderdataqueryex.h"
+
+#include "data/citydatasource.h"
 #include "data/weatherdatasource.h"
 
 #include <bb/cascades/LocaleHandler>
@@ -24,7 +27,9 @@
 
 WeatherHistoryApp::WeatherHistoryApp()
 {
+	qmlRegisterType<SqlHeaderDataQueryEx>("bb.cascades.datamanager", 1, 2, "SqlHeaderDataQueryEx");
 	qmlRegisterType<WeatherDataSource>("utils", 1, 0, "WeatherDataSource");
+	qmlRegisterType<CityDataSource>("utils", 1, 0, "CityDataSource");
 	qmlRegisterType<LoadModelDecorator>("utils", 1, 0, "LoadModelDecorator");
 
 
