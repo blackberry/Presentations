@@ -4,12 +4,14 @@ BASEDIR =  $$quote($$_PRO_FILE_PWD_)
 device {
     CONFIG(debug, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/appsettings.cpp) \
+                 $$quote($$BASEDIR/src/common/loadmodeldecorator.cpp) \
                  $$quote($$BASEDIR/src/data/globalconnection.cpp) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.cpp) \
                  $$quote($$BASEDIR/src/main.cpp) \
                  $$quote($$BASEDIR/src/weatherhistoryapp.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/appsettings.h) \
+                 $$quote($$BASEDIR/src/common/loadmodeldecorator.h) \
                  $$quote($$BASEDIR/src/data/globalconnection.h) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.h) \
                  $$quote($$BASEDIR/src/weatherhistoryapp.h)
@@ -17,12 +19,14 @@ device {
 
     CONFIG(release, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/appsettings.cpp) \
+                 $$quote($$BASEDIR/src/common/loadmodeldecorator.cpp) \
                  $$quote($$BASEDIR/src/data/globalconnection.cpp) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.cpp) \
                  $$quote($$BASEDIR/src/main.cpp) \
                  $$quote($$BASEDIR/src/weatherhistoryapp.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/appsettings.h) \
+                 $$quote($$BASEDIR/src/common/loadmodeldecorator.h) \
                  $$quote($$BASEDIR/src/data/globalconnection.h) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.h) \
                  $$quote($$BASEDIR/src/weatherhistoryapp.h)
@@ -32,19 +36,22 @@ device {
 simulator {
     CONFIG(debug, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/appsettings.cpp) \
+                 $$quote($$BASEDIR/src/common/loadmodeldecorator.cpp) \
                  $$quote($$BASEDIR/src/data/globalconnection.cpp) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.cpp) \
                  $$quote($$BASEDIR/src/main.cpp) \
                  $$quote($$BASEDIR/src/weatherhistoryapp.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/appsettings.h) \
+                 $$quote($$BASEDIR/src/common/loadmodeldecorator.h) \
                  $$quote($$BASEDIR/src/data/globalconnection.h) \
                  $$quote($$BASEDIR/src/data/weatherdatasource.h) \
                  $$quote($$BASEDIR/src/weatherhistoryapp.h)
     }
 }
 
-INCLUDEPATH +=  $$quote($$BASEDIR/src/data) \
+INCLUDEPATH +=  $$quote($$BASEDIR/src/common) \
+         $$quote($$BASEDIR/src/data) \
          $$quote($$BASEDIR/src)
 
 CONFIG += precompile_header

@@ -17,6 +17,7 @@ import utils 1.0
 
 ListView {
     id: weatherList
+    signal dataRequest(variant item);
 
     // An XML model can be used for quickly prototyping the list.
     dataModel: XmlDataModel {
@@ -28,10 +29,29 @@ ListView {
             type: "item"
             WeatherItem {
             }
+        },
+        ListItemComponent {
+            type: "last_item"
+            InlineActivityIndicator {
+                id: recipeIndicator
+                indicatorText: qsTr("Loading items") + Retranslate.onLanguageChanged
+                indicatorRunning: ListItemData.loading
+                indicatorVisble: true
+            }
         }
     ]
-    
-    function itemType(data, indexPath) {
-        return "item";
-    }
+
+    attachedObjects: [
+        ListScrollStateHandler {
+            onAtEndChanged: {
+                if (atEnd && firstVisibleItem.length != 0 && loadModelDecorator.loadingOldItems == false) {
+                    var childCount = weatherList.dataModel.childCount(weatherList.rootIndexPath);
+                    if (childCount > 0) {
+                        var item = weatherList.dataModel.data([ childCount - 2 ]);
+                        dataRequest(item);
+                    }
+                }
+            }
+        }
+    ]
 }

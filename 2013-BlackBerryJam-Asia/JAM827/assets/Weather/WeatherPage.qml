@@ -31,29 +31,37 @@ Page {
     Container {
         WeatherList {
             id: weatherList
-            dataModel: weatherModel
+            dataModel: loadModelDecorator
+
+            onDataRequest: {
+                weatherDataSource.requestWeatherData(item);
+            }
         }
     }
 
     attachedObjects: [
-        AsyncDataModel {
-            id: weatherModel
+        LoadModelDecorator {
+            id: loadModelDecorator
 
-            query: SqlDataQuery {
-                id: sqlDataQuery
-                source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db"
-                keyColumn: "weatherid"
+            model: AsyncDataModel {
+                id: weatherModel
 
-                // Make sure there is revision_id in the query, otherwise listview will not update smoothly
-                revisionColumn: "revision_id"
-                revisionQuery: "SELECT revision_id FROM revision WHERE table_name=:weather"
-            }
+                query: SqlDataQuery {
+                    id: sqlDataQuery
+                    source: "file:///" + _app.getHomeDirectory() + "/weatherhistory.db"
+                    keyColumn: "weatherid"
 
-            onLoaded: {
-                // If no items by this time make request for loading items.
-                var childCount = weatherModel.childCount(weatherList.rootIndexPath);
-                if (childCount == 0) {
-                    weatherDataSource.requestWeatherData();
+                    // Make sure there is revision_id in the query, otherwise listview will not update smoothly
+                    revisionColumn: "revision_id"
+                    revisionQuery: "SELECT revision_id FROM revision WHERE table_name=:weather"
+                }
+
+                onLoaded: {
+                    // If no items by this time make request for loading items.
+                    var childCount = weatherModel.childCount(weatherList.rootIndexPath);
+                    if (childCount == 0) {
+                        weatherDataSource.requestWeatherData(undefined);
+                    }
                 }
             }
         },
@@ -63,10 +71,18 @@ Page {
             onWeatherChanged: {
                 // Switch off loading items and tell the model that new data with revision is available.
                 sqlDataQuery.emitDataChanged(revision);
-             }
+                
+                // Turn off UI components indicating data loading.
+                resetLoadIndicators();
+            }
             
-            function requestWeatherData() {
-            	requestMoreDataFromNetwork(region, city);
+            function requestWeatherData(item) {
+                if (item == undefined) {
+                    requestMoreDataFromNetwork(region, city, "");
+                } else {
+                    requestMoreDataFromNetwork(region, city, item.date);
+                }
+                loadModelDecorator.loadingOldItems = true;
             }
         }
     ]
@@ -75,6 +91,10 @@ Page {
         if (homeWeather && city != "" && region != "") {
             setLocation(region, city);
         }
+    }
+    
+    function resetLoadIndicators() {
+        loadModelDecorator.loadingOldItems = false;
     }
 
     function setLocation(weatherRegion, weatherCity) {

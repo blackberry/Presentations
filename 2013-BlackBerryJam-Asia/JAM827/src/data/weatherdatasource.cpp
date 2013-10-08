@@ -132,19 +132,37 @@ void WeatherDataSource::onSqlConnectorReply(const bb::data::DataAccessReply& rep
     }
 }
 
-void WeatherDataSource::requestMoreDataFromNetwork(const QString region, const QString city)
+void WeatherDataSource::requestMoreDataFromNetwork(const QString region, const QString city,
+    const QString date)
 {
     // Only request data if there is currently no request being done.
     if (mReply == 0) {
+        int dayOffset = 0;
         QString encodedCity = QUrl(city).toEncoded();
         QString encodedRegion = QUrl(region).toEncoded();
         QUrl path = AppSettings::prepareServerUrl(
                 "resources/cities/" + encodedRegion + "/" + encodedCity, true);
+
+        // An empty date string mean request data with 0 days offset.
+        if (!date.isEmpty()) {
+            // Server requests is made with an offset as compared to today
+            QDate today = QDate::currentDate();
+            QDate compareDate = QDate::fromString(date, "yyyy-MM-dd");
+            dayOffset = compareDate.daysTo(today);
+
+            // Add one to day offset to begin at the next date after the "date" parameter.
+            dayOffset += 1;
+        }
+
+        // Add the offset for the server request, corresponds to from which day in the pas the request is made.
+        path.addQueryItem("start", QString("%1").arg(dayOffset));
 
         qDebug() << "GET " << path.toString();
         mReply = mAccessManager.get(QNetworkRequest(path));
 
         // Connect to the reply finished signal to httpFinsihed() Slot function.
         connect(mReply, SIGNAL(finished()), this, SLOT(onHttpFinished()));
+
+        mCursor.index = dayOffset;
     }
 }

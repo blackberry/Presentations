@@ -15,6 +15,7 @@
 #include "weatherhistoryapp.h"
 #include "appsettings.h"
 
+#include "common/loadmodeldecorator.h"
 #include "data/weatherdatasource.h"
 
 #include <bb/cascades/LocaleHandler>
@@ -24,6 +25,8 @@
 WeatherHistoryApp::WeatherHistoryApp()
 {
 	qmlRegisterType<WeatherDataSource>("utils", 1, 0, "WeatherDataSource");
+	qmlRegisterType<LoadModelDecorator>("utils", 1, 0, "LoadModelDecorator");
+
 
     // Prepare localization.Connect to the LocaleHandlers systemLanguaged change signal, this will
     // tell the application when it is time to load a new set of language strings.

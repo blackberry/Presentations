@@ -48,7 +48,7 @@ public:
      * @param city The name of the city.
      * @param date The date used to determine offset for the request.
      */
-    Q_INVOKABLE void requestMoreDataFromNetwork(const QString region, const QString city);
+    Q_INVOKABLE void requestMoreDataFromNetwork(const QString region, const QString city, const QString date);
 
     /**
      * Returns the current global revision of the database plus one.
@@ -106,6 +106,12 @@ private:
 
     // The last accessed data revision.
     int mRevision;
+
+    struct DataCursor {
+    	DataCursor() : index(0){ }
+
+    	uint index;    	// The current data index for server requests
+    } mCursor;
 };
 
 #endif // ifndef _WEATHERDATASOURCE_H_
