@@ -1,0 +1,10 @@
+<root>
+  <item position="1" name="Mattias" time="0.5" moves="2"/>
+  <item position="2" name="Olof" time="1.1" moves="2"/>
+  <item position="3" name="Shailesh" time="1.8" moves="4"/>
+  <item position="4" name="Magnus" time="1.8" moves="6"/>
+  <item position="5" name="Anders" time="2.2" moves="9"/>
+  <item position="6" name="Johan" time="3.0" moves="11"/>
+  <item position="7" name="Oskar" time="5.1" moves="4"/>
+  <item position="8" name="Jonas" time="12.4" moves="24"/>
+</root>
