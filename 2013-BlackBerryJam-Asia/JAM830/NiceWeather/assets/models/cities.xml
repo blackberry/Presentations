@@ -1,0 +1,5 @@
+<root>
+    <city modelUrl="models/tokyo.xml" background="images/tokyo.jpg" altBackground="images/tokyo2.jpg" />
+    <city modelUrl="models/malmoe.xml" background="images/malmoe.jpg" altBackground="images/malmoe2.jpg" />
+    <city modelUrl="models/berlin.xml" background="images/berlin.jpg" altBackground="images/berlin2.jpg" />
+</root> 

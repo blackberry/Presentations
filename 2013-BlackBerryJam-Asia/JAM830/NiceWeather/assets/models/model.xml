@@ -1,0 +1,33 @@
+<!-- Model not used due to CAS-3361 issue -->
+<root>
+    <city modelUrl="models/hongkong.xml" background="images/hongkong.jpg" altBackground="images/hongkong2.jpg" >
+    	<header title="Hong Kong" day="24" night="16" icon="partly.png" />
+	    <item date="Monday" day="25" night="16" icon="sun.png" />
+	    <item date="Tuesday" day="21" night="15" icon="cloudy.png" />
+	    <item date="Wednesday" day="22" night="14" icon="lightning.png" />
+	    <item date="Thursday"  day="24" night="12" icon="sun.png" />
+	    <item date="Friday" day="23" night="16" icon="sun.png" />
+	    <item date="Saturday" day="26" night="12" icon="partly.png" />
+	    <item date="Sunday" day="26" night="14" icon="partly.png" />
+    </city>
+    <city modelUrl="models/malmoe.xml" background="images/malmoe.jpg" altBackground="images/malmoe2.jpg" >
+    	<header title="Malmoe" day="24" night="16" icon="partly.png" />
+	    <item date="Monday" day="25" night="16" icon="sun.png" />
+	    <item date="Tuesday" day="21" night="15" icon="cloudy.png" />
+	    <item date="Wednesday" day="22" night="14" icon="lightning.png" />
+	    <item date="Thursday"  day="24" night="12" icon="sun.png" />
+	    <item date="Friday" day="23" night="16" icon="sun.png" />
+	    <item date="Saturday" day="26" night="12" icon="partly.png" />
+	    <item date="Sunday" day="26" night="14" icon="partly.png" />
+    </city>
+    <city modelUrl="models/berlin.xml" background="images/berlin.jpg" altBackground="images/berlin2.jpg" >
+	    <header title="Berlin" day="24" night="16" icon="partly.png" />
+	    <item date="Monday" day="25" night="16" icon="sun.png" />
+	    <item date="Tuesday" day="21" night="15" icon="cloudy.png" />
+	    <item date="Wednesday" day="22" night="14" icon="lightning.png" />
+	    <item date="Thursday"  day="24" night="12" icon="sun.png" />
+	    <item date="Friday" day="23" night="16" icon="sun.png" />
+	    <item date="Saturday" day="26" night="12" icon="partly.png" />
+	    <item date="Sunday" day="26" night="14" icon="partly.png" />
+    </city>    
+</root> 
