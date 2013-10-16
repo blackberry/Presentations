@@ -1,0 +1,14 @@
+<root>
+    <item title="Linear"/>
+    <item title="QuarticOut"/>
+    <item title="BackOut"/>
+    <item title="ElasticOut"/>
+    <item title="QuarticInOut"/>
+    <item title="BackInOut"/>
+    <item title="BounceInOut"/>
+    <item title="CubicIn"/>
+
+</root>
+<!-- 
+
+-->
