@@ -1,0 +1,16 @@
+<root>
+ <header title="Festivities" color="#cb5a5b" itemImage="asset:///images/jlist-festivities.png" />
+	<toDay title = "Christmas"  date="2000/12/24"  color="#f16767"/> 
+	<toDay title = "Anniversary"  date="2000/11/14"  color="#f16767"/> 
+	<toDay title = "Mid summer"  date="2000/06/19"  color="#f16767"/> 
+  <header title="Family" color="#f8c35b" itemImage="asset:///images/jlist-family.png"/>
+	<ageOf title = "Tova" date="2002/12/29"  color="#facd6d"/> 
+	<ageOf title = "Lukas" date="2005/05/19"  color="#facd6d"/> 
+	<toDay title = "Tovas birthday" date="2002/12/29"  color="#facd6d"/> 
+	<toDay title = "Lukas birthday" date="2005/05/19"  color="#facd6d"/> 
+  <header title="Codes and Pins" color="#5ab1d0" itemImage="asset:///images/jlist-secret.png"/>
+    <protected title = "EBAY password" secret="raser" color="#64d4f9"/>  
+  	<protected title = "VISA" secret="1243-2233-1231-1232 260"  color="#64d4f9"/> 
+  	<protected title = "Bank Account Nr" secret="7450 7540 0574 2311"  color="#64d4f9"/>
+  	<protected title = "Passport Nr" secret="80880808808080880"  color="#64d4f9"/> 
+</root>

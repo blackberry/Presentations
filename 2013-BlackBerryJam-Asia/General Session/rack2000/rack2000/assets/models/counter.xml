@@ -1,0 +1,18 @@
+<root>
+	<item text="FAN FURY" player1Message="11" player2Message="41" icon="fan" type="hw"/>
+	<item text="BLINDING" player1Message="21" player2Message="31" icon="eye" type="hw"/>
+	<item text="REVERSED" icon="reverse" type="sw"/>
+</root>
+<!--
+	<item text="REVERSED DIRECTION" icon="reverse" type="sw"/>
+	Player 1
+	1 fan
+	2 light
+	
+	Player 2
+	3 light
+	4 fan
+	
+	ex: 41 = fan on player 2
+	ex: 20 = light off player 1
+-->
